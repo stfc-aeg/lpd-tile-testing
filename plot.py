@@ -2,7 +2,7 @@
 '''
 
 import matplotlib.pyplot as plt
-import time
+import numpy as np
 
 class plot_data_container():
     def __init__(self, figure, ax):
@@ -16,11 +16,15 @@ def display_data_plot(ax, data, colorbar=None, fault_colorbar=False):
     # Specify colorbar ticks and determine max value of data
     if fault_colorbar is False:
         c_ticks = [0, 511, 1023, 1535, 2047, 2559, 3071, 3583, 4095]
+        # Primarily for stdev data that will rarely reach a max of 4095
+        data_max = np.max(data)
     else: 
         c_ticks = [0, 1, 2, 3]
+        # Constant value set for consistency between multiple fault images
+        data_max = 3
 
     ax.axis('off')
-    image = ax.imshow(data, cmap='ocean', vmin=0, vmax=c_ticks[-1])
+    image = ax.imshow(data, cmap='jet', vmin=0, vmax=data_max)
 
     if colorbar is not None:
         # Create and add colorbar

@@ -33,8 +33,8 @@ def get_stdev_image():
     stdev_image = np.std(lpd_data, axis=0)
     return stdev_image
 
-def get_stdev_tile():
-    tile_data = total_tile()
+def get_stdev_tile(lpd_data, tile_position):
+    tile_data = get_total_tile(lpd_data, tile_position)
     stdev_tile = np.std(tile_data, axis=0)
     #np.clip(stdev_tile, 0, 30, out=stdev_tile)
     return stdev_tile
