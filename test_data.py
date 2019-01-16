@@ -73,9 +73,6 @@ def bad_pixels(tile_data, fault_tile, test_type):
 
     for i in range(0, len(tile_data)):
         for j in range(0, len(tile_data[i])):
-            # Might be useful to know if pixels are below or above the threshold
-            # Hence separate if statements for the time being
-
             if fault_tile[i][j] == 0:
                 if tile_data[i][j] < pixel_threshold[0]:
                     below_threshold_pixels += 1
@@ -106,6 +103,7 @@ def manage_figure(tile_data, test_type):
     elif test_type == 2:
         title_text = "Standard Deviation"
     else:
+        # In case of incorrect test_type argument passed in
         title_text = "Unknown"
 
     # Add titles

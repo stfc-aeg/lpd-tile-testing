@@ -37,7 +37,6 @@ def show_test_results(bad_chips_average, bad_chips_stdev, bad_cols_average, bad_
     print("Bad pixels from standard deviation test: {}".format(bad_pixels_stdev_total))
     print("\n")
 
-
 def display_trigger_images(lpd_data, tile_position):
     gs_trigger = gridspec.GridSpec(2, 3, width_ratios=[9, 9, 1])
     fig_trigger = plt.figure(figsize=(12, 4))

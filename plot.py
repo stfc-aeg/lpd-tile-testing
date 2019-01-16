@@ -4,10 +4,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-class plot_data_container():
-    def __init__(self, figure, ax):
-        pass
-
 def display_data_plot(ax, data, colorbar=None, fault_colorbar=False):
     ''' Displays plot of entire images and tiles
         Colorbar isn't required so trigger images can share one colorbar

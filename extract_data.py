@@ -36,7 +36,6 @@ def get_stdev_image():
 def get_stdev_tile(lpd_data, tile_position):
     tile_data = get_total_tile(lpd_data, tile_position)
     stdev_tile = np.std(tile_data, axis=0)
-    #np.clip(stdev_tile, 0, 30, out=stdev_tile)
     return stdev_tile
 
 def get_single_chip(tile, chip_position):
@@ -65,6 +64,7 @@ def set_tile_position(tile_orientation, mini_connector):
 
     # Left or right tile
     if tile_orientation == "Left Tile":
+        # Left tiles are on the RHS of the image, and vice versa
         tile_position.append(128)
     else:
         tile_position.append(0)

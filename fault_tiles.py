@@ -1,4 +1,3 @@
-import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 import matplotlib.gridspec as gridspec
@@ -37,7 +36,6 @@ def detect(tile_section):
     num_pixels = len(tile_section[0])
 
     if fault_count / num_pixels * 100 > 80:
-        #print("Not testing this column")
         test_section = False
 
     return test_section
@@ -51,5 +49,5 @@ def plot_faults(fault_tile):
     plot.display_data_plot(fault_tile_plot, fault_tile, fault_colorbar, True)
 
     fault_tile_plot.set_title("Plot of Tile's Faults", fontsize=16)
-    
+
     plt.show()
