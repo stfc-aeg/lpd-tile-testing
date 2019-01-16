@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-from matplotlib.figure import Figure
 import matplotlib.gridspec as gridspec
 import numpy as np
 
@@ -7,15 +6,16 @@ import plot
 import extract_data
 import fault_tiles
 
+
 def bad_chips(tile_data, fault_tile, test_type):
     if test_type == 1:
         chip_threshold = (3148.428, 3639.3864)
     elif test_type == 2:
         chip_threshold = (0, 50)  # TODO - Change to stdev values
-    
+
     below_threshold_chips = 0
     above_threshold_chips = 0
-    
+
     for chip in range(0, 8):
         # Calculate the mean of each chip, slicing each chip from mean_tile
         # Values stored in a list - might be useful for later on
@@ -37,12 +37,13 @@ def bad_chips(tile_data, fault_tile, test_type):
     num_bad_chips = [below_threshold_chips, above_threshold_chips]
     return num_bad_chips
 
+
 def bad_columns(tile_data, fault_tile, test_type):
     if test_type == 1:
         column_threshold = (3148.428, 3639.3864)
     elif test_type == 2:
         column_threshold = (0, 50)    # TODO - Change
-    
+
     below_threshold_columns = 0
     above_threshold_columns = 0
 
@@ -60,14 +61,14 @@ def bad_columns(tile_data, fault_tile, test_type):
 
     num_bad_cols = [below_threshold_columns, above_threshold_columns]
     return num_bad_cols
- 
+
 
 def bad_pixels(tile_data, fault_tile, test_type):
     if test_type == 1:
         pixel_threshold = (3148.428, 3639.3864)
     elif test_type == 2:
-        pixel_threshold = (0, 50) # TODO - Change
-    
+        pixel_threshold = (0, 50)  # TODO - Change
+
     above_threshold_pixels = 0
     below_threshold_pixels = 0
 
@@ -84,12 +85,13 @@ def bad_pixels(tile_data, fault_tile, test_type):
     num_bad_pixels = [below_threshold_pixels, above_threshold_pixels]
     return num_bad_pixels
 
+
 def manage_figure(tile_data, test_type):
     ''' Executed at the end of the average test to display relevant plots
     '''
 
     gs1 = gridspec.GridSpec(2, 1, hspace=0.2)
-    gs1_tile = gridspec.GridSpecFromSubplotSpec(1, 2, subplot_spec=gs1[0], wspace=0.05, 
+    gs1_tile = gridspec.GridSpecFromSubplotSpec(1, 2, subplot_spec=gs1[0], wspace=0.05,
                                                 width_ratios=[16, 1])
 
     # Create figure and all subplots
