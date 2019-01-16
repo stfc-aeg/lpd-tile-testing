@@ -10,7 +10,7 @@ class plot_data_container():
 
 def display_data_plot(ax, data, colorbar=None, fault_colorbar=False):
     ''' Displays plot of entire images and tiles
-        Colorbar isn't required - trigger images share one colorbar 
+        Colorbar isn't required so trigger images can share one colorbar
     '''
 
     # Specify colorbar ticks and determine max value of data
@@ -30,6 +30,12 @@ def display_data_plot(ax, data, colorbar=None, fault_colorbar=False):
         # Create and add colorbar
         cbar = plt.colorbar(image, cax=colorbar)
         cbar.set_ticks(ticks=c_ticks)
+
+        if fault_colorbar is True:
+            string_ticks = ['No Fault', 'Fault in mean data', 'Fault in stdev. data', 
+                            'Fault from both data sources']
+            # set_ticks() is executed before to get 4 ticks, instead of more
+            cbar.ax.set_yticklabels(string_ticks)
     
     rows = data.shape[0]
     cols = data.shape[1]
@@ -42,10 +48,8 @@ def display_data_plot(ax, data, colorbar=None, fault_colorbar=False):
     for i in range(32, rows, 32):
         ax.hlines(i-0.5, 0, rows-1, color='k', linestyles='solid')
 
-
 def display_histogram(ax, data):
     ax.hist(data.flatten(), bins=250)
-
 
 def clear_screen():
     plt.close()

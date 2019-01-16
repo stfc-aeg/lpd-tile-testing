@@ -5,23 +5,36 @@ from matplotlib.figure import Figure
 import matplotlib.gridspec as gridspec
 
 
-def show_test_results():
+def show_test_results(bad_chips_average, bad_chips_stdev, bad_cols_average, bad_cols_stdev, bad_pixels_average, bad_pixels_stdev):
     ''' Gives statistics on the bad components of a tile based on all tests completed
     '''
-    # Pass in bad chip, col, pixel count
-    print("Number of bad chips: {}")
-    print("Bad chips from average data test: {}")
-    print("Bad chips from standard deviation test: {}")
+
+    bad_chips_average_total = sum(bad_chips_average)
+    bad_cols_average_total = sum(bad_cols_average)
+    bad_pixels_average_total = sum(bad_pixels_average)
+
+    bad_chips_stdev_total = sum(bad_chips_stdev)
+    bad_cols_stdev_total = sum(bad_cols_stdev)
+    bad_pixels_stdev_total = sum(bad_pixels_stdev)
+
+    bad_chips_total = bad_chips_average_total + bad_chips_stdev_total
+    bad_cols_total = bad_cols_average_total + bad_cols_stdev_total
+    bad_pixels_total = bad_pixels_average_total + bad_pixels_stdev_total
+
+    print("Number of bad chips: {}".format(bad_chips_total))
+    
+    print("Bad chips from average data test: {}".format(bad_chips_average_total))
+    print("Bad chips from standard deviation test: {}".format(bad_chips_stdev_total))
     print("\n")
 
-    print("Number of bad columns: {}")
-    print("Bad columns from average data test: {}")
-    print("Bad columns from standard deviation test: {}")
+    print("Number of bad columns: {}".format(bad_cols_total))
+    print("Bad columns from average data test: {}".format(bad_cols_average_total))
+    print("Bad columns from standard deviation test: {}".format(bad_cols_stdev_total))
     print("\n")
 
-    print("Number of bad pixels")
-    print("Bad pixels from average data test: {}")
-    print("Bad pixels from standard deviation test: {}")
+    print("Number of bad pixels: {}".format(bad_pixels_total))
+    print("Bad pixels from average data test: {}".format(bad_pixels_average_total))
+    print("Bad pixels from standard deviation test: {}".format(bad_pixels_stdev_total))
     print("\n")
 
 
@@ -46,6 +59,8 @@ def display_trigger_images(lpd_data, tile_position):
 
     fig_trigger.suptitle("First {} Trigger Images".format(len(trigger_plots)), fontsize=16)
 
+    plt.show()
+
 def display_first_image(lpd_data):
     gs_first_image = gridspec.GridSpec(1, 2, width_ratios=[10, 1])
     fig_first_image = plt.figure(figsize=(8, 8))
@@ -56,3 +71,5 @@ def display_first_image(lpd_data):
     first_image_plot.set_title("First Image of Data", fontsize=14)
 
     plot.display_data_plot(first_image_plot, first_image, first_image_colorbar)
+
+    plt.show()

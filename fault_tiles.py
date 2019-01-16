@@ -51,3 +51,5 @@ def plot_faults(fault_tile):
     plot.display_data_plot(fault_tile_plot, fault_tile, fault_colorbar, True)
 
     fault_tile_plot.set_title("Plot of Tile's Faults", fontsize=16)
+    
+    plt.show()

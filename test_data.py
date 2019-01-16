@@ -114,3 +114,5 @@ def manage_figure(tile_data, test_type):
 
     plot.display_data_plot(tile_plot, tile_data, tile_colorbar)
     plot.display_histogram(histogram, tile_data)
+
+    plt.show()
