@@ -9,7 +9,6 @@ def display_data_plot(ax, data, colorbar=None, fault_colorbar=False):
     ''' Displays plot of entire images and tiles
         Colorbar isn't required so trigger images can share one colorbar
     '''
-
     # Specify colorbar ticks and determine max value of data
     if fault_colorbar is False:
         c_ticks = [0, 511, 1023, 1535, 2047, 2559, 3071, 3583, 4095]
@@ -20,7 +19,9 @@ def display_data_plot(ax, data, colorbar=None, fault_colorbar=False):
         # Constant value set for consistency between multiple fault images
         data_max = 3
 
+    # Remove axes of images and create them
     ax.axis('off')
+    # Jet colourmap is used in live view section of LPD GUI
     image = ax.imshow(data, cmap='jet', vmin=0, vmax=data_max)
 
     if colorbar is not None:
@@ -29,6 +30,7 @@ def display_data_plot(ax, data, colorbar=None, fault_colorbar=False):
         cbar.set_ticks(ticks=c_ticks)
 
         if fault_colorbar is True:
+            # Change ticks to strings to make them more understandable to user
             string_ticks = ['No Fault', 'Fault in mean data', 'Fault in stdev. data',
                             'Fault from both data sources']
             # set_ticks() is executed before to get 4 ticks, instead of more

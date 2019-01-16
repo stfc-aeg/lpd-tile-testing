@@ -40,17 +40,24 @@ def get_mean_tile(lpd_data, tile_position):
 
 
 def get_total_tile(lpd_data, tile_position):
+    ''' Return a 32 x 128 tile that contains the aggregate of all the images in the file
+        Used in get_stdev_tile()
+    '''
     total_tile_data = lpd_data[:lpd_data.shape[0], tile_position[0]:tile_position[0] + 32,
                                tile_position[1]:tile_position[1] + 128]
     return total_tile_data
 
 
 def get_stdev_image(lpd_data):
+    ''' Get an image that contains the standard deviation of all data in the file
+    '''
     stdev_image = np.std(lpd_data, axis=0)
     return stdev_image
 
 
 def get_stdev_tile(lpd_data, tile_position):
+    ''' Get a tile that contains the standard deviation of the data in the file
+    '''
     tile_data = get_total_tile(lpd_data, tile_position)
     stdev_tile = np.std(tile_data, axis=0)
     return stdev_tile
@@ -60,13 +67,14 @@ def get_single_chip(tile, chip_position):
     ''' Get single chip from a single tile
         chip_position - int from 0 to 7
     '''
-
     chip_position = chip_position * 16
     single_chip = tile[:, chip_position:chip_position + 16]
     return single_chip
 
 
 def get_single_column(tile, col_position):
+    ''' Get a single column within a tile
+    '''
     single_column = tile[:, col_position:col_position + 1]
     return single_column
 

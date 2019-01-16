@@ -8,6 +8,9 @@ import fault_tiles
 
 
 def bad_chips(tile_data, fault_tile, test_type):
+    ''' Test number of bad chips based on the input from tile_data
+    '''
+    # Thresholds used to determine bad chips
     if test_type == 1:
         chip_threshold = (3148.428, 3639.3864)
     elif test_type == 2:
@@ -17,9 +20,9 @@ def bad_chips(tile_data, fault_tile, test_type):
     above_threshold_chips = 0
 
     for chip in range(0, 8):
-        # Calculate the mean of each chip, slicing each chip from mean_tile
-        # Values stored in a list - might be useful for later on
+        # Calculate the mean of each chip, slicing each chip from tile_data
         fault_chip = extract_data.get_single_chip(fault_tile, chip)
+        # Determine whether the chip needs testing
         test_chip = fault_tiles.detect(fault_chip)
 
         if test_chip:
@@ -28,17 +31,22 @@ def bad_chips(tile_data, fault_tile, test_type):
             if mean_chip_value < chip_threshold[0]:
                 below_threshold_chips += 1
                 chip_position = chip * 16
+
+                # Add fault to tile
                 fault_tiles.add_fault(fault_tile, test_type, 0, chip_position, (32, chip_position + 16))
             elif mean_chip_value > chip_threshold[1]:
                 above_threshold_chips += 1
                 chip_position = chip * 16
                 fault_tiles.add_fault(fault_tile, test_type, 0, chip_position, (32, chip_position + 16))
 
+    # Collate results of bad chips to be used in test_results.py
     num_bad_chips = [below_threshold_chips, above_threshold_chips]
     return num_bad_chips
 
 
 def bad_columns(tile_data, fault_tile, test_type):
+    ''' Test number of bad columns based on the input from tile_data
+    '''
     if test_type == 1:
         column_threshold = (3148.428, 3639.3864)
     elif test_type == 2:
@@ -64,6 +72,8 @@ def bad_columns(tile_data, fault_tile, test_type):
 
 
 def bad_pixels(tile_data, fault_tile, test_type):
+    ''' Test number of bad pixels based on the input from tile_data
+    '''
     if test_type == 1:
         pixel_threshold = (3148.428, 3639.3864)
     elif test_type == 2:
@@ -89,8 +99,8 @@ def bad_pixels(tile_data, fault_tile, test_type):
 def manage_figure(tile_data, test_type):
     ''' Executed at the end of the average test to display relevant plots
     '''
-
     gs1 = gridspec.GridSpec(2, 1, hspace=0.2)
+    # GridSpec inside subplot - used for plot of tile with colorbar
     gs1_tile = gridspec.GridSpecFromSubplotSpec(1, 2, subplot_spec=gs1[0], wspace=0.05,
                                                 width_ratios=[16, 1])
 
@@ -112,6 +122,7 @@ def manage_figure(tile_data, test_type):
     tile_plot.set_title("Plot of Tile Using {} Data".format(title_text), fontsize=16)
     histogram.set_title("Histogram of {} Tile Data".format(title_text), fontsize=16)
 
+    # Display tile plot and relevant histogram
     plot.display_data_plot(tile_plot, tile_data, tile_colorbar)
     plot.display_histogram(histogram, tile_data)
 
