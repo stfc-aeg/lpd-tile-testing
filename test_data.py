@@ -23,7 +23,7 @@ def bad_chips(tile_data, fault_tile, test_type):
         # Calculate the mean of each chip, slicing each chip from tile_data
         fault_chip = extract_data.get_single_chip(fault_tile, chip)
         # Determine whether the chip needs testing
-        test_chip = fault_tiles.detect(fault_chip)
+        test_chip = fault_tiles.detect(fault_chip, test_type)
 
         if test_chip:
             mean_chip_value = np.mean(extract_data.get_single_chip(tile_data, chip))
@@ -57,7 +57,7 @@ def bad_columns(tile_data, fault_tile, test_type):
 
     for column in range(0, 128):
         fault_column = extract_data.get_single_column(fault_tile, column)
-        test_column = fault_tiles.detect(fault_column)
+        test_column = fault_tiles.detect(fault_column, test_type)
         if test_column:
             mean_column_value = np.mean(extract_data.get_single_column(tile_data, column))
             if mean_column_value < column_threshold[0]:
@@ -109,11 +109,13 @@ def manage_figure(tile_data, test_type):
     tile_plot = fig.add_subplot(gs1_tile[0, 0])
     tile_colorbar = fig.add_subplot(gs1_tile[0, 1])
     histogram = fig.add_subplot(gs1[1, 0])
+    colorbar_type = 0
 
     if test_type == 1:
         title_text = "Mean"
     elif test_type == 2:
         title_text = "Standard Deviation"
+        colorbar_type = 1
     else:
         # In case of incorrect test_type argument passed in
         title_text = "Unknown"
@@ -123,7 +125,7 @@ def manage_figure(tile_data, test_type):
     histogram.set_title("Histogram of {} Tile Data".format(title_text), fontsize=16)
 
     # Display tile plot and relevant histogram
-    plot.display_data_plot(tile_plot, tile_data, tile_colorbar)
+    plot.display_data_plot(tile_plot, tile_data, tile_colorbar, colorbar_type)
     plot.display_histogram(histogram, tile_data)
 
     plt.show()

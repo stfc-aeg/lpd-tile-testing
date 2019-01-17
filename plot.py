@@ -5,19 +5,26 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-def display_data_plot(ax, data, colorbar=None, fault_colorbar=False):
+def display_data_plot(ax, data, colorbar=None, colorbar_type=0):
     ''' Displays plot of entire images and tiles
         Colorbar isn't required so trigger images can share one colorbar
+        colorbar_type - int value representing type of colorbar being passed
+            0 - Colorbar for image plot using raw or mean data
+            1 - Colorbar for image using standard deviation data
+            2 - Colorbar for showing tile's faults
     '''
     # Specify colorbar ticks and determine max value of data
-    if fault_colorbar is False:
+    if colorbar_type == 0:
         c_ticks = [0, 511, 1023, 1535, 2047, 2559, 3071, 3583, 4095]
         # Primarily for stdev data that will rarely reach a max of 4095
+        data_max = 4095
+    elif colorbar_type == 1:
+        c_ticks = [0, 511, 1023, 1535, 2047, 2559, 3071, 3583, 4095]
         data_max = np.max(data)
-    else:
-        c_ticks = [0, 1, 2, 3]
+    elif colorbar_type == 2:
+        c_ticks = [0, 1, 2]
         # Constant value set for consistency between multiple fault images
-        data_max = 3
+        data_max = 2
 
     # Remove axes of images and create them
     ax.axis('off')
@@ -29,11 +36,10 @@ def display_data_plot(ax, data, colorbar=None, fault_colorbar=False):
         cbar = plt.colorbar(image, cax=colorbar)
         cbar.set_ticks(ticks=c_ticks)
 
-        if fault_colorbar is True:
+        if colorbar_type == 2:
             # Change ticks to strings to make them more understandable to user
-            string_ticks = ['No Fault', 'Fault in mean data', 'Fault in stdev. data',
-                            'Fault from both data sources']
-            # set_ticks() is executed before to get 4 ticks, instead of more
+            string_ticks = ['No Fault', 'Fault in mean data', 'Fault in stdev. data']
+            # set_ticks() is executed before to get 3 ticks, instead of more
             cbar.ax.set_yticklabels(string_ticks)
 
     rows = data.shape[0]

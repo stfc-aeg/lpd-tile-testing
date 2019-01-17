@@ -17,13 +17,13 @@ def add_fault(fault_tile, test_type, x, y, end_points=None):
 
     if test_type == 1:
         # Mean fault
-        fault_tile[x:end_points[0], y:end_points[1]] += 1
+        fault_tile[x:end_points[0], y:end_points[1]] = 1
     elif test_type == 2:
         # Stdev fault
-        fault_tile[x:end_points[0], y:end_points[1]] += 2
+        fault_tile[x:end_points[0], y:end_points[1]] = 2
 
 
-def detect(tile_section):
+def detect(tile_section, test_type):
     ''' Determines whether the data being passed in should be tested or not
         tile_section can be a column or chip section from a tile
     '''
@@ -42,7 +42,7 @@ def detect(tile_section):
     num_pixels = len(tile_section[0])
 
     # If majority of section is faulty, don't test it
-    if fault_count / num_pixels * 100 > 80:
+    if (fault_count / num_pixels) * 100 > 90:
         test_section = False
 
     return test_section
@@ -56,7 +56,7 @@ def plot_faults(fault_tile):
 
     fault_tile_plot = fig_fault.add_subplot(gs1[0, 0])
     fault_colorbar = fig_fault.add_subplot(gs1[0, 1])
-    plot.display_data_plot(fault_tile_plot, fault_tile, fault_colorbar, True)
+    plot.display_data_plot(fault_tile_plot, fault_tile, fault_colorbar, 2)
 
     fault_tile_plot.set_title("Plot of Tile's Faults", fontsize=16)
 
