@@ -7,15 +7,15 @@ from IPython.display import HTML, display
 from tabulate import tabulate
 
 
-def show_test_results(bad_chips_average, bad_chips_stdev, bad_cols_average, bad_cols_stdev,
-                      bad_pixels_average, bad_pixels_stdev):
+def show_test_results(bad_chips_mean, bad_chips_stdev, bad_cols_mean, bad_cols_stdev,
+                      bad_pixels_mean, bad_pixels_stdev):
     ''' Gives statistics on the bad components of a tile based on all tests completed
     '''
 
     # Totalling all bad components from mean tile
-    bad_chips_average_total = sum(bad_chips_average)
-    bad_cols_average_total = sum(bad_cols_average)
-    bad_pixels_average_total = sum(bad_pixels_average)
+    bad_chips_mean_total = sum(bad_chips_mean)
+    bad_cols_mean_total = sum(bad_cols_mean)
+    bad_pixels_mean_total = sum(bad_pixels_mean)
 
     # Totalling all bad components from stdev tile
     bad_chips_stdev_total = sum(bad_chips_stdev)
@@ -23,18 +23,18 @@ def show_test_results(bad_chips_average, bad_chips_stdev, bad_cols_average, bad_
     bad_pixels_stdev_total = sum(bad_pixels_stdev)
 
     # Totalling faults of each type of component (chip, column, pixel)
-    bad_chips_total = bad_chips_average_total + bad_chips_stdev_total
-    bad_cols_total = bad_cols_average_total + bad_cols_stdev_total
-    bad_pixels_total = bad_pixels_average_total + bad_pixels_stdev_total
+    bad_chips_total = bad_chips_mean_total + bad_chips_stdev_total
+    bad_cols_total = bad_cols_mean_total + bad_cols_stdev_total
+    bad_pixels_total = bad_pixels_mean_total + bad_pixels_stdev_total
 
     # Outputting faults to user
     table_values = [
-                    ["<b>Average Total</b>", bad_chips_average_total, bad_cols_average_total, bad_pixels_average_total],
-                    ["Lower Than Threshold", bad_chips_average[0], bad_cols_average[0], bad_pixels_average[0]],
-                    ["Higher Than Threshold", bad_chips_average[1], bad_chips_average[1], bad_chips_average[1]],
+                    ["<b>Mean Total</b>", bad_chips_mean_total, bad_cols_mean_total, bad_pixels_mean_total],
+                    ["Lower Than Threshold", bad_chips_mean[0], bad_cols_mean[0], bad_pixels_mean[0]],
+                    ["Higher Than Threshold", bad_chips_mean[1], bad_chips_mean[1], bad_chips_mean[1]],
                     ["<b>Standard Deviation Total</b>", bad_chips_stdev_total, bad_cols_stdev_total,
                      bad_pixels_stdev_total],
-                    ["Lower Than Threshold", bad_chips_stdev[0], bad_cols_stdev[0], bad_pixels_average[0]],
+                    ["Lower Than Threshold", bad_chips_stdev[0], bad_cols_stdev[0], bad_pixels_mean[0]],
                     ["Higher Than Threshold", bad_chips_stdev[1], bad_cols_stdev[1], bad_pixels_stdev[1]],
                     ["<b>Overall Total</b>", bad_chips_total, bad_cols_total, bad_pixels_total]
                    ]

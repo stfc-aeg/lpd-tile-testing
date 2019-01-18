@@ -97,7 +97,7 @@ def bad_pixels(tile_data, fault_tile, test_type):
 
 
 def manage_figure(tile_data, test_type):
-    ''' Executed at the end of the average test to display relevant plots
+    ''' Executed at the end of the mean test to display relevant plots
     '''
     gs1 = gridspec.GridSpec(2, 1, hspace=0.2)
     # GridSpec inside subplot - used for plot of tile with colorbar

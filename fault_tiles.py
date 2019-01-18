@@ -7,7 +7,7 @@ import plot
 def add_fault(fault_tile, test_type, x, y, end_points=None):
     '''
     test_type should only be 1 or 2 - any other value that's passed will be ignored
-        1 - The test type is a test using average data
+        1 - The test type is a test using mean data
         2 - The type type is a test using standard deviation data
     Only pass end_points (tuple) if you want to add a fault to a section (column or chip)
     '''
