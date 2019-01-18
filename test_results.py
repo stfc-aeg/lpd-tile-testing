@@ -91,5 +91,3 @@ def display_first_image(lpd_data):
     first_image_colorbar = fig_first_image.add_subplot(gs_first_image[0, 1])
     first_image_plot.set_title("First Image of Data", fontsize=14)
     plot.display_data_plot(first_image_plot, first_image, first_image_colorbar)
-
-    plt.show()
