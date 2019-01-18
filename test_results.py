@@ -3,6 +3,9 @@ import extract_data
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 
+from IPython.display import HTML, display
+from tabulate import tabulate
+
 
 def show_test_results(bad_chips_average, bad_chips_stdev, bad_cols_average, bad_cols_stdev,
                       bad_pixels_average, bad_pixels_stdev):
@@ -25,20 +28,20 @@ def show_test_results(bad_chips_average, bad_chips_stdev, bad_cols_average, bad_
     bad_pixels_total = bad_pixels_average_total + bad_pixels_stdev_total
 
     # Outputting faults to user
-    print("Number of bad chips: {}".format(bad_chips_total))
-    print("Bad chips from average data test: {}".format(bad_chips_average_total))
-    print("Bad chips from standard deviation test: {}".format(bad_chips_stdev_total))
-    print("\n")
+    table_values = [
+                    ["<b>Average Total</b>", bad_chips_average_total, bad_cols_average_total, bad_pixels_average_total],
+                    ["Lower Than Threshold", bad_chips_average[0], bad_cols_average[0], bad_pixels_average[0]],
+                    ["Higher Than Threshold", bad_chips_average[1], bad_chips_average[1], bad_chips_average[1]],
+                    ["<b>Standard Deviation Total</b>", bad_chips_stdev_total, bad_cols_stdev_total,
+                     bad_pixels_stdev_total],
+                    ["Lower Than Threshold", bad_chips_stdev[0], bad_cols_stdev[0], bad_pixels_average[0]],
+                    ["Higher Than Threshold", bad_chips_stdev[1], bad_cols_stdev[1], bad_pixels_stdev[1]],
+                    ["<b>Overall Total</b>", bad_chips_total, bad_cols_total, bad_pixels_total]
+                   ]
 
-    print("Number of bad columns: {}".format(bad_cols_total))
-    print("Bad columns from average data test: {}".format(bad_cols_average_total))
-    print("Bad columns from standard deviation test: {}".format(bad_cols_stdev_total))
-    print("\n")
+    table_headers = ["", "Bad Chips", "Bad Columns", "Bad Pixels"]
 
-    print("Number of bad pixels: {}".format(bad_pixels_total))
-    print("Bad pixels from average data test: {}".format(bad_pixels_average_total))
-    print("Bad pixels from standard deviation test: {}".format(bad_pixels_stdev_total))
-    print("\n")
+    display(HTML(tabulate(table_values, headers=table_headers, tablefmt='html')))
 
 
 def display_trigger_images(lpd_data, tile_position):
