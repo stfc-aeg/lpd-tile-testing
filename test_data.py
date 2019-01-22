@@ -96,36 +96,10 @@ def bad_pixels(tile_data, fault_tile, test_type):
     return num_bad_pixels
 
 
-def manage_figure(tile_data, test_type):
+def manage_figure(tile_data, tile_plot, tile_colorbar, histogram, colorbar_type):
     ''' Executed at the end of the mean test to display relevant plots
     '''
-    gs1 = gridspec.GridSpec(2, 1, hspace=0.2)
-    # GridSpec inside subplot - used for plot of tile with colorbar
-    gs1_tile = gridspec.GridSpecFromSubplotSpec(1, 2, subplot_spec=gs1[0], wspace=0.05,
-                                                width_ratios=[16, 1])
-
-    # Create figure and all subplots
-    fig = plt.figure(figsize=(12, 6))
-    tile_plot = fig.add_subplot(gs1_tile[0, 0])
-    tile_colorbar = fig.add_subplot(gs1_tile[0, 1])
-    histogram = fig.add_subplot(gs1[1, 0])
-    colorbar_type = 0
-
-    if test_type == 1:
-        title_text = "Mean"
-    elif test_type == 2:
-        title_text = "Standard Deviation"
-        colorbar_type = 1
-    else:
-        # In case of incorrect test_type argument passed in
-        title_text = "Unknown"
-
-    # Add titles
-    tile_plot.set_title("Plot of Tile Using {} Data".format(title_text), fontsize=16)
-    histogram.set_title("Histogram of {} Tile Data".format(title_text), fontsize=16)
 
     # Display tile plot and relevant histogram
     plot.display_data_plot(tile_plot, tile_data, tile_colorbar, colorbar_type)
     plot.display_histogram(histogram, tile_data)
-
-    plt.show()

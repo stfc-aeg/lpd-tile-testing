@@ -3,13 +3,41 @@ import extract_data
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 
-from IPython.display import HTML, display
+from IPython.display import HTML, display, update_display
 from tabulate import tabulate
 
 
 def show_test_results(bad_chips_mean, bad_chips_stdev, bad_cols_mean, bad_cols_stdev,
-                      bad_pixels_mean, bad_pixels_stdev):
+                      bad_pixels_mean, bad_pixels_stdev, results_table):
     ''' Gives statistics on the bad components of a tile based on all tests completed
+    '''
+
+    # Determine whether table is being displayed for first time or is being updated
+    if results_table is None:
+        update_needed = False
+    else:
+        update_needed = True
+
+    table_values = update_table_values(bad_chips_mean, bad_chips_stdev,
+                                       bad_cols_mean, bad_cols_stdev,
+                                       bad_pixels_mean, bad_pixels_stdev)
+
+    table_headers = ["", "Bad Chips", "Bad Columns", "Bad Pixels"]
+
+    results_table = HTML(tabulate(table_values, headers=table_headers, tablefmt='html'))
+
+    if update_needed:
+        update_display(results_table, display_id="results")
+    else:
+        display(results_table, display_id="results")
+
+    return results_table
+
+
+def update_table_values(bad_chips_mean, bad_chips_stdev, bad_cols_mean, bad_cols_stdev,
+                        bad_pixels_mean, bad_pixels_stdev):
+    ''' Update values in results table - values may change between each analysis if file chosen is
+        different each time
     '''
 
     # Totalling all bad components from mean tile
@@ -26,8 +54,7 @@ def show_test_results(bad_chips_mean, bad_chips_stdev, bad_cols_mean, bad_cols_s
     bad_chips_total = bad_chips_mean_total + bad_chips_stdev_total
     bad_cols_total = bad_cols_mean_total + bad_cols_stdev_total
     bad_pixels_total = bad_pixels_mean_total + bad_pixels_stdev_total
-
-    # Outputting faults to user
+                
     table_values = [
                     ["<b>Mean Total</b>", bad_chips_mean_total, bad_cols_mean_total, bad_pixels_mean_total],
                     ["Lower Than Threshold", bad_chips_mean[0], bad_cols_mean[0], bad_pixels_mean[0]],
@@ -39,9 +66,7 @@ def show_test_results(bad_chips_mean, bad_chips_stdev, bad_cols_mean, bad_cols_s
                     ["<b>Overall Total</b>", bad_chips_total, bad_cols_total, bad_pixels_total]
                    ]
 
-    table_headers = ["", "Bad Chips", "Bad Columns", "Bad Pixels"]
-
-    display(HTML(tabulate(table_values, headers=table_headers, tablefmt='html')))
+    return table_values
 
 
 def display_trigger_images(lpd_data, tile_position):
@@ -49,7 +74,7 @@ def display_trigger_images(lpd_data, tile_position):
         status of checkbox
     '''
     gs_trigger = gridspec.GridSpec(2, 3, width_ratios=[9, 9, 1])
-    fig_trigger = plt.figure(figsize=(12, 4))
+    fig_trigger = plt.figure(figsize=(8, 4))
 
     # List containing each subplot containing each trigger plot
     trigger_plots = []
@@ -76,14 +101,12 @@ def display_trigger_images(lpd_data, tile_position):
 
     fig_trigger.suptitle("First {} Trigger Images".format(len(trigger_plots)), fontsize=16)
 
-    plt.show()
-
 
 def display_first_image(lpd_data):
     ''' Display first image to user dependent on status of checkbox
     '''
-    gs_first_image = gridspec.GridSpec(1, 2, width_ratios=[10, 1])
     fig_first_image = plt.figure(figsize=(8, 8))
+    gs_first_image = gridspec.GridSpec(1, 2, width_ratios=[10, 1])
 
     # Get first image of data and plot it
     first_image = extract_data.get_first_image(lpd_data)

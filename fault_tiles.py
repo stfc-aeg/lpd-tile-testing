@@ -51,30 +51,7 @@ def detect(tile_section, test_type):
     return test_section
 
 
-def plot_faults(fault_tile):
+def plot_faults(fault_tile_plot, fault_tile):
     ''' Plot all the faults found during testing the tile
     '''
-    gs1 = gridspec.GridSpec(1, 2, width_ratios=[16, 1], wspace=0.3)
-    fig_fault = plt.figure(figsize=(12, 3))
-
-    fault_tile_plot = fig_fault.add_subplot(gs1[0, 0])
-    fault_legend = fig_fault.add_subplot(gs1[0, 1])
-
-    # Disabling axes for legend
-    fault_legend.axis('off')
-
     plot.display_data_plot(fault_tile_plot, fault_tile, colorbar_type=2)
-
-    # Getting range of colour values used in colormap
-    cmap = cm.get_cmap('jet')
-    colorbar_range = colors.Normalize(vmin=0, vmax=2)
-
-    # Creating legend
-    no_fault_patch = mpatches.Patch(color=cmap(colorbar_range(0)), label='No Fault')
-    mean_patch = mpatches.Patch(color=cmap(colorbar_range(1)), label='Mean Fault')
-    stdev_patch = mpatches.Patch(color=cmap(colorbar_range(2)), label='Stdev Fault')
-    fault_legend.legend(handles=[no_fault_patch, mean_patch, stdev_patch], loc='upper right')
-
-    fault_tile_plot.set_title("Plot of Tile's Faults", fontsize=16)
-
-    plt.show()
