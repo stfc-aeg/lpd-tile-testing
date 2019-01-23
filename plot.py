@@ -22,19 +22,7 @@ def setup_test_plots(test_type):
     histogram = fig.add_subplot(gs1[1, 0])
 
     disable_ticks(tile_plot)
-    disable_ticks(tile_colorbar)
-
-    if test_type == 1:
-        title_text = "Mean"
-    elif test_type == 2:
-        title_text = "Standard Deviation"
-    else:
-        # In case of incorrect test_type argument passed in
-        title_text = "Unknown"
-
-    # Add titles
-    tile_plot.set_title("Plot of Tile Using {} Data".format(title_text), fontsize=16)
-    histogram.set_title("Histogram of {} Tile Data".format(title_text), fontsize=16)
+    #disable_ticks(tile_colorbar)
 
     return (fig, tile_plot, tile_colorbar, histogram)
 
@@ -59,8 +47,6 @@ def setup_fault_plots():
     mean_patch = mpatches.Patch(color=cmap(colorbar_range(1)), label='Mean Fault')
     stdev_patch = mpatches.Patch(color=cmap(colorbar_range(2)), label='Stdev Fault')
     fault_legend.legend(handles=[no_fault_patch, mean_patch, stdev_patch], loc='right')
-
-    fault_tile_plot.set_title("Plot of Tile's Faults", fontsize=16)
 
     return (fig_fault, fault_tile_plot, fault_legend)
 
@@ -99,7 +85,6 @@ def setup_first_image_plot():
     # Create subplots for image and respective colorbar
     first_image_plot = fig_first_image.add_subplot(gs_first_image[0, 0])
     first_image_colorbar = fig_first_image.add_subplot(gs_first_image[0, 1])
-    first_image_plot.set_title("First Image of Data", fontsize=14)
 
     return (fig_first_image, first_image_plot, first_image_colorbar)
 
@@ -107,6 +92,30 @@ def setup_first_image_plot():
 def disable_ticks(ax):
     ax.set_xticks([])
     ax.set_yticks([])
+
+
+def set_plot_titles(mean_tile_plot, mean_histogram, stdev_tile_plot, stdev_histogram,
+                    fault_tile_plot, trigger_plots, first_image_plot):
+    ''' Set titles of all plots and remove ticks on images
+        Titles are removed on each gca() call so must be re-set for every analysis done
+    '''
+
+    mean_tile_plot.set_title("Plot of Tile Using Mean Data", fontsize=16)
+    mean_histogram.set_title("Histogram of Mean Tile Data", fontsize=16)
+    disable_ticks(mean_tile_plot)
+
+    stdev_tile_plot.set_title("Plot of Tile Using Standard Deviation Data", fontsize=16)
+    stdev_histogram.set_title("Histogram of Standard Deviation Tile Data", fontsize=16)
+    disable_ticks(stdev_tile_plot)
+
+    fault_tile_plot.set_title("Plot of Tile's Faults", fontsize=16)
+    first_image_plot.set_title("First Image of Data", fontsize=16)
+    disable_ticks(fault_tile_plot)
+    disable_ticks(first_image_plot)
+
+    for trigger_pos in range(0, 4):
+        trigger_plots[trigger_pos].set_title("Trigger {}".format(trigger_pos + 1))
+        disable_ticks(trigger_plots[trigger_pos])
 
 
 def display_data_plot(ax, data, colorbar=None, colorbar_type=0):
