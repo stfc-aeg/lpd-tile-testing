@@ -66,7 +66,7 @@ def setup_fault_plots():
 
 
 def setup_trigger_plots():
-    fig_trigger = plt.figure(figsize=(8, 4))
+    fig_trigger = plt.figure(figsize=(8, 3))
     gs_trigger = gridspec.GridSpec(2, 3, width_ratios=[9, 9, 1])
 
     # List containing each subplot containing each trigger plot
