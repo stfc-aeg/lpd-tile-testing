@@ -129,7 +129,7 @@ def display_data_plot(ax, data, colorbar=None, colorbar_type=0):
         c_ticks = [0, 1, 2]
         # Constant value set for consistency between multiple fault images
         data_max = 2
- 
+
     # Jet colourmap is used in live view section of LPD GUI
     image = ax.imshow(data, cmap='jet', vmin=0, vmax=data_max)
 

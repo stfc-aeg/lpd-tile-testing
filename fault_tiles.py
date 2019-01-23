@@ -1,9 +1,3 @@
-import matplotlib.pyplot as plt
-import matplotlib.gridspec as gridspec
-import matplotlib.patches as mpatches
-import matplotlib.cm as cm
-import matplotlib.colors as colors
-
 import plot
 
 

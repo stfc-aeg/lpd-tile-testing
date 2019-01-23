@@ -1,7 +1,5 @@
 import plot
 import extract_data
-import matplotlib.pyplot as plt
-import matplotlib.gridspec as gridspec
 
 from IPython.display import HTML, display, update_display
 from tabulate import tabulate
@@ -54,7 +52,7 @@ def update_table_values(bad_chips_mean, bad_chips_stdev, bad_cols_mean, bad_cols
     bad_chips_total = bad_chips_mean_total + bad_chips_stdev_total
     bad_cols_total = bad_cols_mean_total + bad_cols_stdev_total
     bad_pixels_total = bad_pixels_mean_total + bad_pixels_stdev_total
-                
+
     table_values = [
                     ["<b>Mean Total</b>", bad_chips_mean_total, bad_cols_mean_total, bad_pixels_mean_total],
                     ["Lower Than Threshold", bad_chips_mean[0], bad_cols_mean[0], bad_pixels_mean[0]],
