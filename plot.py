@@ -21,9 +21,6 @@ def setup_test_plots(test_type):
     tile_colorbar = fig.add_subplot(gs1_tile[0, 1])
     histogram = fig.add_subplot(gs1[1, 0])
 
-    disable_ticks(tile_plot)
-    #disable_ticks(tile_colorbar)
-
     return (fig, tile_plot, tile_colorbar, histogram)
 
 
@@ -34,9 +31,8 @@ def setup_fault_plots():
     fault_tile_plot = fig_fault.add_subplot(gs1[0, 0])
     fault_legend = fig_fault.add_subplot(gs1[0, 1])
 
-    # Disabling axes details for legend and tile plot
+    # Disabling axes for legend - works permanently so no need to be put into set_plot_titles()
     fault_legend.axis('off')
-    disable_ticks(fault_tile_plot)
 
     # Getting range of colour values used in colormap
     cmap = cm.get_cmap('jet')
@@ -67,9 +63,6 @@ def setup_trigger_plots():
         trigger_plots.append(fig_trigger.add_subplot(gs_trigger[plot_pos_x[trigger_pos],
                                                                 plot_pos_y[trigger_pos]]))
         trigger_plots[trigger_pos].set_title("Trigger {}".format(trigger_pos + 1))
-
-        # Disable ticks for each trigger tile
-        disable_ticks(trigger_plots[trigger_pos])
 
     trigger_colorbar = fig_trigger.add_subplot(gs_trigger[:, 2])
 
