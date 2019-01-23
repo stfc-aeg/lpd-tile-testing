@@ -21,11 +21,8 @@ def setup_test_plots(test_type):
     tile_colorbar = fig.add_subplot(gs1_tile[0, 1])
     histogram = fig.add_subplot(gs1[1, 0])
 
-    tile_plot.set_xticks([])
-    tile_plot.set_yticks([])
-
-    tile_colorbar.set_xticks([])
-    tile_colorbar.set_yticks([])
+    disable_ticks(tile_plot)
+    disable_ticks(tile_colorbar)
 
     if test_type == 1:
         title_text = "Mean"
@@ -51,8 +48,7 @@ def setup_fault_plots():
 
     # Disabling axes details for legend and tile plot
     fault_legend.axis('off')
-    fault_tile_plot.set_xticks([])
-    fault_tile_plot.set_yticks([])
+    disable_ticks(fault_tile_plot)
 
     # Getting range of colour values used in colormap
     cmap = cm.get_cmap('jet')
@@ -67,6 +63,50 @@ def setup_fault_plots():
     fault_tile_plot.set_title("Plot of Tile's Faults", fontsize=16)
 
     return (fig_fault, fault_tile_plot, fault_legend)
+
+
+def setup_trigger_plots():
+    fig_trigger = plt.figure(figsize=(8, 4))
+    gs_trigger = gridspec.GridSpec(2, 3, width_ratios=[9, 9, 1])
+
+    # List containing each subplot containing each trigger plot
+    trigger_plots = []
+
+    # Coords. of subplots GridSpec positioning
+    plot_pos_x = (0, 0, 1, 1)
+    plot_pos_y = (0, 1, 0, 1)
+
+    # Create each trigger image
+    for trigger_pos in range(0, 4):
+        trigger_plots.append(fig_trigger.add_subplot(gs_trigger[plot_pos_x[trigger_pos],
+                                                                plot_pos_y[trigger_pos]]))
+        trigger_plots[trigger_pos].set_title("Trigger {}".format(trigger_pos + 1))
+
+        # Disable ticks for each trigger tile
+        disable_ticks(trigger_plots[trigger_pos])
+
+    trigger_colorbar = fig_trigger.add_subplot(gs_trigger[:, 2])
+
+    fig_trigger.suptitle("First {} Trigger Images".format(len(trigger_plots)), fontsize=16)
+
+    return (fig_trigger, trigger_plots, trigger_colorbar)
+
+
+def setup_first_image_plot():
+    fig_first_image = plt.figure(figsize=(8, 8))
+    gs_first_image = gridspec.GridSpec(1, 2, width_ratios=[10, 1])
+
+    # Create subplots for image and respective colorbar
+    first_image_plot = fig_first_image.add_subplot(gs_first_image[0, 0])
+    first_image_colorbar = fig_first_image.add_subplot(gs_first_image[0, 1])
+    first_image_plot.set_title("First Image of Data", fontsize=14)
+
+    return (fig_first_image, first_image_plot, first_image_colorbar)
+
+
+def disable_ticks(ax):
+    ax.set_xticks([])
+    ax.set_yticks([])
 
 
 def display_data_plot(ax, data, colorbar=None, colorbar_type=0):
