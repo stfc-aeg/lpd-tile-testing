@@ -122,11 +122,11 @@ def display_data_plot(ax, data, colorbar=None, colorbar_type=0):
     # Specify colorbar ticks and determine max value of data
     if colorbar_type == 0:
         c_ticks = [0, 511, 1023, 1535, 2047, 2559, 3071, 3583, 4095]
-        # Primarily for stdev data that will rarely reach a max of 4095
+        # Raw/mean data will always have max of 4095
         data_max = 4095
     elif colorbar_type == 1:
-        c_ticks = [0, 511, 1023, 1535, 2047, 2559, 3071, 3583, 4095]
-        data_max = np.max(data)
+        c_ticks = [0, 100, 200, 300, 400, 500]
+        data_max = 500
     elif colorbar_type == 2:
         c_ticks = [0, 1, 2]
         # Constant value set for consistency between multiple fault images
