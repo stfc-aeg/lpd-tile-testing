@@ -59,7 +59,7 @@ def update_table_values(bad_chips_mean, bad_chips_stdev, bad_cols_mean, bad_cols
                     ["Higher Than Threshold", bad_chips_mean[1], bad_chips_mean[1], bad_chips_mean[1]],
                     ["<b>Standard Deviation Total</b>", bad_chips_stdev_total, bad_cols_stdev_total,
                      bad_pixels_stdev_total],
-                    ["Lower Than Threshold", bad_chips_stdev[0], bad_cols_stdev[0], bad_pixels_mean[0]],
+                    ["Lower Than Threshold", bad_chips_stdev[0], bad_cols_stdev[0], bad_pixels_stdev[0]],
                     ["Higher Than Threshold", bad_chips_stdev[1], bad_cols_stdev[1], bad_pixels_stdev[1]],
                     ["<b>Overall Total</b>", bad_chips_total, bad_cols_total, bad_pixels_total]
                    ]
