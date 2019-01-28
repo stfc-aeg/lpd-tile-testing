@@ -6,7 +6,6 @@ import matplotlib.gridspec as gridspec
 import matplotlib.patches as mpatches
 import matplotlib.cm as cm
 import matplotlib.colors as colors
-import numpy as np
 
 
 def setup_test_plots(test_type):
