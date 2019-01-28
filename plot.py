@@ -15,7 +15,8 @@ def setup_test_plots(test_type):
                                                 width_ratios=[16, 1])
 
     # Create figure and all subplots
-    fig = plt.figure(figsize=(8, 4))
+    fig_titles = ('Mean Data Plots', 'Standard Deviation Plots')
+    fig = plt.figure(figsize=(8, 4), num=fig_titles[test_type - 1])
     tile_plot = fig.add_subplot(gs1_tile[0, 0])
     tile_colorbar = fig.add_subplot(gs1_tile[0, 1])
     histogram = fig.add_subplot(gs1[1, 0])
@@ -24,7 +25,7 @@ def setup_test_plots(test_type):
 
 
 def setup_fault_plots():
-    fig_fault = plt.figure(figsize=(8, 2))
+    fig_fault = plt.figure(figsize=(8, 2), num='Fault Plot')
     gs1 = gridspec.GridSpec(1, 2, width_ratios=[16, 1], wspace=0.5)
 
     fault_tile_plot = fig_fault.add_subplot(gs1[0, 0])
