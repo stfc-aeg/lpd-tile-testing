@@ -3,6 +3,7 @@ import extract_data
 
 from IPython.display import HTML, display, update_display
 from tabulate import tabulate
+import matplotlib.pyplot as plt
 
 
 def show_test_results(bad_chips_mean, bad_chips_stdev, bad_cols_mean, bad_cols_stdev,
@@ -10,26 +11,25 @@ def show_test_results(bad_chips_mean, bad_chips_stdev, bad_cols_mean, bad_cols_s
     ''' Gives statistics on the bad components of a tile based on all tests completed
     '''
 
-    # Determine whether table is being displayed for first time or is being updated
-    if results_table is None:
-        update_needed = False
-    else:
-        update_needed = True
+    fig_results = plt.figure(figsize=(8, 2), num='Bad Components')
+    results_table = fig_results.add_subplot(111)
+    results_table.axis('off')
 
+    # When creating the table, just create a numpy array full of zeros
     table_values = update_table_values(bad_chips_mean, bad_chips_stdev,
                                        bad_cols_mean, bad_cols_stdev,
                                        bad_pixels_mean, bad_pixels_stdev)
 
-    table_headers = ["", "Bad Chips", "Bad Columns", "Bad Pixels"]
+    columns = ["Bad Chips", "Bad Columns", "Bad Pixels"]
+    rows = ["Mean Total", "Lower Than Threshold", "Higher Than Threshold",
+            "Standard Deviation Total", "Lower Than Threshold", "Higher Than Threshold",
+            "Overall Total"]
 
-    results_table = HTML(tabulate(table_values, headers=table_headers, tablefmt='html'))
+    results_table = plt.table(cellText=table_values, rowLabels=rows, colLabels=columns, loc="center")
+    plt.subplots_adjust(left=0.3)
 
-    if update_needed:
-        update_display(results_table, display_id="results")
-    else:
-        display(results_table, display_id="results")
-
-    return results_table
+    # Undo comment
+    return (fig_results, results_table)
 
 
 def update_table_values(bad_chips_mean, bad_chips_stdev, bad_cols_mean, bad_cols_stdev,
@@ -54,14 +54,13 @@ def update_table_values(bad_chips_mean, bad_chips_stdev, bad_cols_mean, bad_cols
     bad_pixels_total = bad_pixels_mean_total + bad_pixels_stdev_total
 
     table_values = [
-                    ["<b>Mean Total</b>", bad_chips_mean_total, bad_cols_mean_total, bad_pixels_mean_total],
-                    ["Lower Than Threshold", bad_chips_mean[0], bad_cols_mean[0], bad_pixels_mean[0]],
-                    ["Higher Than Threshold", bad_chips_mean[1], bad_chips_mean[1], bad_chips_mean[1]],
-                    ["<b>Standard Deviation Total</b>", bad_chips_stdev_total, bad_cols_stdev_total,
-                     bad_pixels_stdev_total],
-                    ["Lower Than Threshold", bad_chips_stdev[0], bad_cols_stdev[0], bad_pixels_stdev[0]],
-                    ["Higher Than Threshold", bad_chips_stdev[1], bad_cols_stdev[1], bad_pixels_stdev[1]],
-                    ["<b>Overall Total</b>", bad_chips_total, bad_cols_total, bad_pixels_total]
+                    [bad_chips_mean_total, bad_cols_mean_total, bad_pixels_mean_total],
+                    [bad_chips_mean[0], bad_cols_mean[0], bad_pixels_mean[0]],
+                    [bad_chips_mean[1], bad_chips_mean[1], bad_chips_mean[1]],
+                    [bad_chips_stdev_total, bad_cols_stdev_total, bad_pixels_stdev_total],
+                    [bad_chips_stdev[0], bad_cols_stdev[0], bad_pixels_stdev[0]],
+                    [bad_chips_stdev[1], bad_cols_stdev[1], bad_pixels_stdev[1]],
+                    [bad_chips_total, bad_cols_total, bad_pixels_total]
                    ]
 
     return table_values
