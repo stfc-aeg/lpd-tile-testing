@@ -1,43 +1,46 @@
 import plot
 import extract_data
 
-from IPython.display import HTML, display, update_display
-from tabulate import tabulate
 import matplotlib.pyplot as plt
+import numpy as np
 
 
-def show_test_results(bad_chips_mean, bad_chips_stdev, bad_cols_mean, bad_cols_stdev,
-                      bad_pixels_mean, bad_pixels_stdev, results_table):
+def setup_results_table():
     ''' Gives statistics on the bad components of a tile based on all tests completed
     '''
 
+    # Was 8 x2
     fig_results = plt.figure(figsize=(8, 2), num='Bad Components')
     results_table = fig_results.add_subplot(111)
+    # Plot will be displayed with the table if this isn't done
     results_table.axis('off')
 
-    # When creating the table, just create a numpy array full of zeros
-    table_values = update_table_values(bad_chips_mean, bad_chips_stdev,
-                                       bad_cols_mean, bad_cols_stdev,
-                                       bad_pixels_mean, bad_pixels_stdev)
+    # Only need 16 bit ints as max value of an array element will be 4096
+    table_values = np.zeros((7, 3), dtype=np.int16)
+    results_table = update_table(table_values, results_table, fig_results)
 
+    plt.subplots_adjust(left=0.3)
+
+    return (fig_results, results_table)
+
+
+def update_table(table_values, results_table, fig_results):
+    ''' Update values in results table - values may change between each analysis if file chosen is
+        different each time
+    '''
+
+    # Change to tuples
     columns = ["Bad Chips", "Bad Columns", "Bad Pixels"]
     rows = ["Mean Total", "Lower Than Threshold", "Higher Than Threshold",
             "Standard Deviation Total", "Lower Than Threshold", "Higher Than Threshold",
             "Overall Total"]
 
-    results_table = plt.table(cellText=table_values, rowLabels=rows, colLabels=columns, loc="center")
-    plt.subplots_adjust(left=0.3)
-
-    # Undo comment
-    return (fig_results, results_table)
+    results_table = plt.table(cellText=table_values, rowLabels=rows, colLabels=columns, loc="best")
+    return results_table
 
 
-def update_table_values(bad_chips_mean, bad_chips_stdev, bad_cols_mean, bad_cols_stdev,
-                        bad_pixels_mean, bad_pixels_stdev):
-    ''' Update values in results table - values may change between each analysis if file chosen is
-        different each time
-    '''
-
+def collate_results(bad_chips_mean, bad_chips_stdev, bad_cols_mean, bad_cols_stdev,
+                    bad_pixels_mean, bad_pixels_stdev):
     # Totalling all bad components from mean tile
     bad_chips_mean_total = sum(bad_chips_mean)
     bad_cols_mean_total = sum(bad_cols_mean)
@@ -53,7 +56,7 @@ def update_table_values(bad_chips_mean, bad_chips_stdev, bad_cols_mean, bad_cols
     bad_cols_total = bad_cols_mean_total + bad_cols_stdev_total
     bad_pixels_total = bad_pixels_mean_total + bad_pixels_stdev_total
 
-    table_values = [
+    results_list = [
                     [bad_chips_mean_total, bad_cols_mean_total, bad_pixels_mean_total],
                     [bad_chips_mean[0], bad_cols_mean[0], bad_pixels_mean[0]],
                     [bad_chips_mean[1], bad_chips_mean[1], bad_chips_mean[1]],
@@ -63,7 +66,7 @@ def update_table_values(bad_chips_mean, bad_chips_stdev, bad_cols_mean, bad_cols
                     [bad_chips_total, bad_cols_total, bad_pixels_total]
                    ]
 
-    return table_values
+    return results_list
 
 
 def display_trigger_images(lpd_data, tile_position, fig_trigger, trigger_plots, trigger_colorbar):
