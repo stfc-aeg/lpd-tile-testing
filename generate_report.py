@@ -10,4 +10,7 @@ def export(fig_list, filename):
         # Insert each figure into PDF created by Matplotlib
         figure.savefig(pdf_file, format='pdf')
 
+    d = pdf_file.infodict()
+    d['Title'] = "Analysis of {}".format(filename)
+
     pdf_file.close()
