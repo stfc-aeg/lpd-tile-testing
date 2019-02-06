@@ -7,11 +7,11 @@ import os
 from datetime import datetime
 
 
-# TODO - Change to setup_results_figure()
-def setup_results_table():
-    ''' Gives statistics on the bad components of a tile based on all tests completed
+def setup_results_figure():
+    ''' Gives statistics on the bad components of a tile based on all tests completed.
+        Table is created here using an array full of 0's and the values are updated in 
+        update_table()
     '''
-    # TODO - Give reference in docstring about why table is created w/ 0's then updated
 
     fig_results = plt.figure(figsize=(8, 2.5), num='Bad Components')
     results_table = fig_results.add_subplot(212)
@@ -22,16 +22,14 @@ def setup_results_table():
     analysis_textarea.axis('off')
     plt.subplots_adjust(left=0.3)
 
-    # TODO - Change to tuples
     # Column and row labels for table
-    columns = ["Bad Chips", "Bad Columns", "Bad Pixels"]
-    rows = ["Mean Total", "Lower Than Threshold", "Higher Than Threshold",
+    columns = ("Bad Chips", "Bad Columns", "Bad Pixels")
+    rows = ("Mean Total", "Lower Than Threshold", "Higher Than Threshold",
             "Standard Deviation Total", "Lower Than Threshold", "Higher Than Threshold",
-            "Overall Total"]
+            "Overall Total")
     # Only need 16 bit ints as max value of an array element will be 4096
     table_values = np.zeros((7, 3), dtype=np.int16)
 
-    # TODO - Is loc argument needed?
     # Create table ready to be updated upon analysis
     results_table = plt.table(cellText=table_values, rowLabels=rows, colLabels=columns, loc="upper center")
 
@@ -60,9 +58,6 @@ def update_table(table_values, results_table):
             # row + 1 is used to avoid manipulating column headers
             cells_dict[(row + 1, col)].get_text().set_text(table_values[row][col])
 
-    # TODO - Does table need to be returned?
-    return results_table
-
 
 def set_analysis_text(analysis_textarea, analysis_text_list, filename, data_path):
     new_data = []
@@ -83,8 +78,6 @@ def set_analysis_text(analysis_textarea, analysis_text_list, filename, data_path
 
 def collate_results(bad_chips_mean, bad_chips_stdev, bad_cols_mean, bad_cols_stdev,
                     bad_pixels_mean, bad_pixels_stdev):
-    # TODO - Add docstring
-
     # Totalling all bad components from mean tile
     bad_chips_mean_total = sum(bad_chips_mean)
     bad_cols_mean_total = sum(bad_cols_mean)
@@ -100,16 +93,13 @@ def collate_results(bad_chips_mean, bad_chips_stdev, bad_cols_mean, bad_cols_std
     bad_cols_total = bad_cols_mean_total + bad_cols_stdev_total
     bad_pixels_total = bad_pixels_mean_total + bad_pixels_stdev_total
 
-    # TODO - Resolve styling issue
-    results_list = [
-                    [bad_chips_mean_total, bad_cols_mean_total, bad_pixels_mean_total],
+    results_list = [[bad_chips_mean_total, bad_cols_mean_total, bad_pixels_mean_total],
                     [bad_chips_mean[0], bad_cols_mean[0], bad_pixels_mean[0]],
                     [bad_chips_mean[1], bad_chips_mean[1], bad_chips_mean[1]],
                     [bad_chips_stdev_total, bad_cols_stdev_total, bad_pixels_stdev_total],
                     [bad_chips_stdev[0], bad_cols_stdev[0], bad_pixels_stdev[0]],
                     [bad_chips_stdev[1], bad_cols_stdev[1], bad_pixels_stdev[1]],
-                    [bad_chips_total, bad_cols_total, bad_pixels_total]
-                   ]
+                    [bad_chips_total, bad_cols_total, bad_pixels_total]]
 
     return results_list
 
