@@ -42,7 +42,7 @@ def setup_results_table():
 
     analysis_text_list = []
     for line, line_num in zip(analysis_metadata, range(0, len(analysis_metadata))):
-        analysis_text_list.append(analysis_textarea.text(-0.45, (-1.1 + (0.18 * line_num)), line))
+        analysis_text_list.append(analysis_textarea.text(-0.45, (-0.8 + (-0.18 * line_num)), line))
 
     return (fig_results, results_table, analysis_textarea, analysis_text_list)
 
@@ -66,12 +66,13 @@ def update_table(table_values, results_table):
 
 def set_analysis_text(analysis_textarea, analysis_text_list, filename, data_path):
     new_data = []
-    # Get date analysis took place, i.e. runtime's date
-    new_data.append(datetime.today().strftime('%d/%m/%Y'))
-    # Get the date the data file was last modified
-    new_data.append(os.path.getmtime(data_path + filename))
     # Get name of file used for analysis
     new_data.append(filename)
+    # Get the date the data file was last modified - converted from Unix to human readable format
+    date_modified = os.path.getmtime(data_path + filename)
+    new_data.append(datetime.fromtimestamp(date_modified).strftime('%d/%m/%Y'))
+    # Get date analysis took place, i.e. runtime's date
+    new_data.append(datetime.today().strftime('%d/%m/%Y'))
 
     # Modify text objects to update details of analysis
     for line, data in zip(analysis_text_list, new_data):
