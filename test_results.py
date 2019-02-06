@@ -9,7 +9,7 @@ from datetime import datetime
 
 def setup_results_figure():
     ''' Gives statistics on the bad components of a tile based on all tests completed.
-        Table is created here using an array full of 0's and the values are updated in 
+        Table is created here using an array full of 0's and the values are updated in
         update_table()
     '''
 
