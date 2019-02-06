@@ -3,6 +3,8 @@ import extract_data
 
 import matplotlib.pyplot as plt
 import numpy as np
+import os
+from datetime import datetime
 
 
 def setup_results_table():
@@ -10,11 +12,13 @@ def setup_results_table():
     '''
     # TODO - Give reference in docstring about why table is created w/ 0's then updated
 
-    fig_results = plt.figure(figsize=(8, 2), num='Bad Components')
-    results_table = fig_results.add_subplot(111)
+    fig_results = plt.figure(figsize=(8, 8), num='Bad Components')
+    results_table = fig_results.add_subplot(211)
+    analysis_text = fig_results.add_subplot(212)
 
     # Plot will be displayed with the table if this isn't done
     results_table.axis('off')
+    analysis_text.axis('off')
     plt.subplots_adjust(left=0.3)
 
     # TODO - Change to tuples
@@ -28,9 +32,9 @@ def setup_results_table():
 
     # TODO - Is loc argument needed?
     # Create table ready to be updated upon analysis
-    results_table = plt.table(cellText=table_values, rowLabels=rows, colLabels=columns, loc="best")
+    results_table = plt.table(cellText=table_values, rowLabels=rows, colLabels=columns, loc="upper center")
 
-    return (fig_results, results_table)
+    return (fig_results, results_table, analysis_text)
 
 
 def update_table(table_values, results_table):
@@ -48,6 +52,21 @@ def update_table(table_values, results_table):
 
     # TODO - Does table need to be returned?
     return results_table
+
+
+def set_analysis_text(analysis_text, filename, data_path):
+    # Get the date the data file was last modified
+    date_modified = os.path.getmtime(data_path + filename)
+
+    analysis_date = datetime.today().strftime('%d/%m/%Y')
+
+    # Used an implicitly joined string as multilines have indentation when formatted to PEP8
+    analysis_metadata = ("Data file used: {}".format(filename),
+                         "Date modified of data: {}".format(date_modified),
+                         "Date of analysis: {}".format(analysis_date))
+
+    for line, line_num in zip(analysis_metadata, range(0, len(analysis_metadata))):
+        analysis_text.text(-0.45, (0.3 + (0.05 * line_num)), line)
 
 
 def collate_results(bad_chips_mean, bad_chips_stdev, bad_cols_mean, bad_cols_stdev,
@@ -69,6 +88,7 @@ def collate_results(bad_chips_mean, bad_chips_stdev, bad_cols_mean, bad_cols_std
     bad_cols_total = bad_cols_mean_total + bad_cols_stdev_total
     bad_pixels_total = bad_pixels_mean_total + bad_pixels_stdev_total
 
+    # TODO - Resolve styling issue
     results_list = [
                     [bad_chips_mean_total, bad_cols_mean_total, bad_pixels_mean_total],
                     [bad_chips_mean[0], bad_cols_mean[0], bad_pixels_mean[0]],
