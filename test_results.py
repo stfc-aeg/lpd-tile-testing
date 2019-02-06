@@ -42,7 +42,7 @@ def setup_results_table():
 
     analysis_text_list = []
     for line, line_num in zip(analysis_metadata, range(0, len(analysis_metadata))):
-        analysis_text_list.append(analysis_textarea.text(-0.45, (-1.1 + (0.15 * line_num)), line))
+        analysis_text_list.append(analysis_textarea.text(-0.45, (-1.1 + (0.18 * line_num)), line))
 
     return (fig_results, results_table, analysis_textarea, analysis_text_list)
 
