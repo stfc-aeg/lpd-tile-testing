@@ -7,6 +7,7 @@ import os
 from datetime import datetime
 
 
+# TODO - Change to setup_results_figure()
 def setup_results_table():
     ''' Gives statistics on the bad components of a tile based on all tests completed
     '''
@@ -14,11 +15,11 @@ def setup_results_table():
 
     fig_results = plt.figure(figsize=(8, 2.5), num='Bad Components')
     results_table = fig_results.add_subplot(212)
-    analysis_text = fig_results.add_subplot(211)
+    analysis_textarea = fig_results.add_subplot(211)
 
     # Plot will be displayed with the table if this isn't done
     results_table.axis('off')
-    analysis_text.axis('off')
+    analysis_textarea.axis('off')
     plt.subplots_adjust(left=0.3)
 
     # TODO - Change to tuples
@@ -34,7 +35,16 @@ def setup_results_table():
     # Create table ready to be updated upon analysis
     results_table = plt.table(cellText=table_values, rowLabels=rows, colLabels=columns, loc="upper center")
 
-    return (fig_results, results_table, analysis_text)
+    # Create text objects for details about analysis
+    analysis_metadata = ("Data file used:",
+                         "Date modified of data:",
+                         "Date of analysis:")
+
+    analysis_text_list = []
+    for line, line_num in zip(analysis_metadata, range(0, len(analysis_metadata))):
+        analysis_text_list.append(analysis_textarea.text(-0.45, (-1.1 + (0.15 * line_num)), line))
+
+    return (fig_results, results_table, analysis_textarea, analysis_text_list)
 
 
 def update_table(table_values, results_table):
@@ -54,19 +64,20 @@ def update_table(table_values, results_table):
     return results_table
 
 
-def set_analysis_text(analysis_text, filename, data_path):
+def set_analysis_text(analysis_textarea, analysis_text_list, filename, data_path):
+    new_data = []
+    # Get date analysis took place, i.e. runtime's date
+    new_data.append(datetime.today().strftime('%d/%m/%Y'))
     # Get the date the data file was last modified
-    date_modified = os.path.getmtime(data_path + filename)
+    new_data.append(os.path.getmtime(data_path + filename))
+    # Get name of file used for analysis
+    new_data.append(filename)
 
-    analysis_date = datetime.today().strftime('%d/%m/%Y')
-
-    # Used an implicitly joined string as multilines have indentation when formatted to PEP8
-    analysis_metadata = ("Data file used: {}".format(filename),
-                         "Date modified of data: {}".format(date_modified),
-                         "Date of analysis: {}".format(analysis_date))
-
-    for line, line_num in zip(analysis_metadata, range(0, len(analysis_metadata))):
-        analysis_text.text(-0.45, (-1.1 + (0.15 * line_num)), line)
+    # Modify text objects to update details of analysis
+    for line, data in zip(analysis_text_list, new_data):
+        # Remove old details and update with new ones
+        new_text = "{}: {}".format(line.get_text().split(':')[0], data)
+        line.set_text(new_text)
 
 
 def collate_results(bad_chips_mean, bad_chips_stdev, bad_cols_mean, bad_cols_stdev,
