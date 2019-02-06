@@ -12,9 +12,9 @@ def setup_results_table():
     '''
     # TODO - Give reference in docstring about why table is created w/ 0's then updated
 
-    fig_results = plt.figure(figsize=(8, 8), num='Bad Components')
-    results_table = fig_results.add_subplot(211)
-    analysis_text = fig_results.add_subplot(212)
+    fig_results = plt.figure(figsize=(8, 2.5), num='Bad Components')
+    results_table = fig_results.add_subplot(212)
+    analysis_text = fig_results.add_subplot(211)
 
     # Plot will be displayed with the table if this isn't done
     results_table.axis('off')
@@ -66,7 +66,7 @@ def set_analysis_text(analysis_text, filename, data_path):
                          "Date of analysis: {}".format(analysis_date))
 
     for line, line_num in zip(analysis_metadata, range(0, len(analysis_metadata))):
-        analysis_text.text(-0.45, (0.3 + (0.05 * line_num)), line)
+        analysis_text.text(-0.45, (-1.1 + (0.15 * line_num)), line)
 
 
 def collate_results(bad_chips_mean, bad_chips_stdev, bad_cols_mean, bad_cols_stdev,
