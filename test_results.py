@@ -12,10 +12,9 @@ def setup_results_figure():
         Table is created here using an array full of 0's and the values are updated in
         update_table()
     '''
-
-    fig_results = plt.figure(figsize=(8, 2.5), num='Bad Components')
-    results_table = fig_results.add_subplot(212)
-    analysis_textarea = fig_results.add_subplot(211)
+    results_fig = plt.figure(figsize=(8, 2.5), num='Bad Components')
+    results_table = results_fig.add_subplot(212)
+    analysis_textarea = results_fig.add_subplot(211)
 
     # Plot will be displayed with the table if this isn't done
     results_table.axis('off')
@@ -38,18 +37,18 @@ def setup_results_figure():
                          "Date modified of data:",
                          "Date of analysis:")
 
+    # Create text giving details of the analysis
     analysis_text_list = []
     for line, line_num in zip(analysis_metadata, range(0, len(analysis_metadata))):
         analysis_text_list.append(analysis_textarea.text(-0.45, (-0.8 + (-0.18 * line_num)), line))
 
-    return (fig_results, results_table, analysis_textarea, analysis_text_list)
+    return (results_fig, results_table, analysis_textarea, analysis_text_list)
 
 
 def update_table(table_values, results_table):
     ''' Update values in results table - values may change between each analysis if file chosen is
         different each time
     '''
-
     # Get dictionary of cells in table
     cells_dict = results_table.get_celld()
 
@@ -60,6 +59,8 @@ def update_table(table_values, results_table):
 
 
 def set_analysis_text(analysis_textarea, analysis_text_list, filename, data_path):
+    ''' Sets text for each line of text in the results figure
+    '''
     new_data = []
     # Get name of file used for analysis
     new_data.append(filename)
@@ -78,6 +79,8 @@ def set_analysis_text(analysis_textarea, analysis_text_list, filename, data_path
 
 def collate_results(bad_chips_mean, bad_chips_stdev, bad_cols_mean, bad_cols_stdev,
                     bad_pixels_mean, bad_pixels_stdev):
+    ''' Combine all values obtained from analysis into a list
+    '''
     # Totalling all bad components from mean tile
     bad_chips_mean_total = sum(bad_chips_mean)
     bad_cols_mean_total = sum(bad_cols_mean)
@@ -93,6 +96,7 @@ def collate_results(bad_chips_mean, bad_chips_stdev, bad_cols_mean, bad_cols_std
     bad_cols_total = bad_cols_mean_total + bad_cols_stdev_total
     bad_pixels_total = bad_pixels_mean_total + bad_pixels_stdev_total
 
+    # Forming results into a list
     results_list = [[bad_chips_mean_total, bad_cols_mean_total, bad_pixels_mean_total],
                     [bad_chips_mean[0], bad_cols_mean[0], bad_pixels_mean[0]],
                     [bad_chips_mean[1], bad_chips_mean[1], bad_chips_mean[1]],
@@ -108,7 +112,6 @@ def display_trigger_images(lpd_data, tile_position, fig_trigger, trigger_plots, 
     ''' Display an image of each of the first 4 triggers (images 1, 11, 21, 31) dependent on
         status of checkbox
     '''
-
     display_images = (0, 10, 20, 30)
 
     # Create each trigger image

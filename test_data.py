@@ -24,9 +24,11 @@ def bad_chips(tile_data, fault_tile, test_type):
         test_chip = fault_tiles.detect(fault_chip, test_type)
 
         if test_chip:
+            # Take mean value of each chip
             mean_chip_value = np.mean(extract_data.get_single_chip(tile_data, chip))
 
             if mean_chip_value < chip_threshold[0]:
+                # TODO - Put into a separate function, called here and at elif?
                 below_threshold_chips += 1
                 chip_position = chip * 16
 
@@ -97,7 +99,6 @@ def bad_pixels(tile_data, fault_tile, test_type):
 def manage_figure(tile_data, tile_plot, tile_colorbar, histogram, colorbar_type):
     ''' Executed at the end of the mean test to display relevant plots
     '''
-
     # Display tile plot and relevant histogram
     plot.display_data_plot(tile_plot, tile_data, tile_colorbar, colorbar_type)
     plot.display_histogram(histogram, tile_data)

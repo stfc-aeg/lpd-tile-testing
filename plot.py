@@ -9,6 +9,8 @@ import matplotlib.colors as colors
 
 
 def setup_test_plots(test_type):
+    ''' Creates a figure with plots for either mean data or stdev data - determined by test_type
+    '''
     gs1 = gridspec.GridSpec(2, 1, hspace=0.3)
     # GridSpec inside subplot - used for plot of tile with colorbar
     gs1_tile = gridspec.GridSpecFromSubplotSpec(1, 2, subplot_spec=gs1[0], wspace=0.05,
@@ -25,6 +27,8 @@ def setup_test_plots(test_type):
 
 
 def setup_fault_plots():
+    ''' Create figure & plot for fault image
+    '''
     fig_fault = plt.figure(figsize=(8, 2), num='Fault Plot')
     gs1 = gridspec.GridSpec(1, 2, width_ratios=[16, 1], wspace=0.5)
 
@@ -34,7 +38,7 @@ def setup_fault_plots():
     # Disabling axes for legend - works permanently so no need to be put into set_plot_titles()
     fault_legend.axis('off')
 
-    # Getting range of colour values used in colormap
+    # Getting range of colour values used in colormap - jet is used in FEM GUI, so also used here
     cmap = cm.get_cmap('jet')
     colorbar_range = colors.Normalize(vmin=0, vmax=2)
 
@@ -48,6 +52,9 @@ def setup_fault_plots():
 
 
 def setup_trigger_plots():
+    ''' Create figure & plots for first 4 trigger tiles. Currently hardcoded to assume each frame
+        contains 10 images
+    '''
     fig_trigger = plt.figure(figsize=(8, 3))
     gs_trigger = gridspec.GridSpec(2, 3, width_ratios=[9, 9, 1])
 
@@ -65,13 +72,14 @@ def setup_trigger_plots():
         trigger_plots[trigger_pos].set_title("Trigger {}".format(trigger_pos + 1))
 
     trigger_colorbar = fig_trigger.add_subplot(gs_trigger[:, 2])
-
     fig_trigger.suptitle("First {} Trigger Images".format(len(trigger_plots)), fontsize=16)
 
     return (fig_trigger, trigger_plots, trigger_colorbar)
 
 
 def setup_first_image_plot():
+    ''' Create figure and plot for very first image
+    '''
     fig_first_image = plt.figure(figsize=(8, 6))
     gs_first_image = gridspec.GridSpec(1, 2, width_ratios=[12, 1], wspace=0.05)
 
@@ -83,6 +91,8 @@ def setup_first_image_plot():
 
 
 def disable_ticks(ax):
+    ''' Disable ticks on both x & y axis - used to remove them from colorbars and image/tile plots
+    '''
     ax.set_xticks([])
     ax.set_yticks([])
 
@@ -92,7 +102,6 @@ def set_plot_titles(mean_tile_plot, mean_histogram, stdev_tile_plot, stdev_histo
     ''' Set titles of all plots and remove ticks on images
         Titles are removed on each gca() call so must be re-set for every analysis done
     '''
-
     mean_tile_plot.set_title("Plot of Tile Using Mean Data", fontsize=16)
     mean_histogram.set_title("Histogram of Mean Tile Data", fontsize=16)
     disable_ticks(mean_tile_plot)
@@ -158,8 +167,6 @@ def display_data_plot(ax, data, colorbar=None, colorbar_type=0):
 
 
 def display_histogram(ax, data):
+    ''' Displays histograms
+    '''
     ax.hist(data.flatten(), bins=250)
-
-
-def clear_screen():
-    plt.close()

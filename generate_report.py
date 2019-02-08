@@ -3,7 +3,13 @@ import os
 
 
 def export(fig_list, filename, data_path):
-    # save_path must not have trailing forward slash
+    ''' Creates PDF file of all the figures displayed in the notebook
+    '''
+    # Protecting path from trailing '/' from $HOME
+    home_location = os.environ['HOME']
+    if home_location[-1] == '/':
+        home_location = home_location[:-1]
+
     save_path = "{}/develop/projects/lpd/tile_analysis".format(os.environ['HOME'])
 
     # split() - remove file extension from filename of data
@@ -13,6 +19,7 @@ def export(fig_list, filename, data_path):
         # Insert each figure into PDF created by Matplotlib
         figure.savefig(pdf_file, format='pdf')
 
+    # Add metadata to PDF file
     d = pdf_file.infodict()
     d['Title'] = "Analysis of {}".format(filename)
 

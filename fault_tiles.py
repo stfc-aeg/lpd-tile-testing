@@ -3,6 +3,7 @@ import plot
 
 def add_fault(fault_tile, test_type, x, y, end_points=None):
     '''
+    Add a faulty component (pixel/column/chip) to fault_tile
     test_type should only be 1 or 2 - any other value that's passed will be ignored
         1 - The test type is a test using mean data
         2 - The type type is a test using standard deviation data
@@ -24,22 +25,23 @@ def detect(tile_section, test_type):
     ''' Determines whether the data being passed in should be tested or not
         tile_section can be a column or chip section from a tile
     '''
-    # Assume the section should be tested and attempt to prove it shouldn't
+    # Assume the section should be tested and attempt to prove it shouldn't be tested
     test_section = True
 
     # Counts the number of bad pixels in the given area
-    fault_count = 0
+    pixel_fault_count = 0
 
     # Count number of faulty pixels in section
     for i in range(0, len(tile_section)):
         for j in range(0, len(tile_section[i])):
             if tile_section[i][j] != 0:
-                fault_count += 1
+                pixel_fault_count += 1
 
+    # Total number of pixels in tile_section
     num_pixels = len(tile_section[0])
 
     # If majority of section is faulty, don't test it
-    if (fault_count / num_pixels) * 100 > 90:
+    if (pixel_fault_count / num_pixels) * 100 > 90:
         test_section = False
 
     return test_section
