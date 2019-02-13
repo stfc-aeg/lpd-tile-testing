@@ -32,7 +32,12 @@ def setup_results_figure():
     # Create table ready to be updated upon analysis
     results_table = plt.table(cellText=table_values, rowLabels=rows, colLabels=columns,
                               loc="upper center")
-    print(dir(results_table))
+
+    # Increase cell height to make contents of the cells more readable
+    table_props = results_table.properties()
+    table_cells = table_props['child_artists']
+    for cell in table_cells:
+        cell.set_height(0.21)
 
     # Setting style and weight of row labels
     italic_label_index = (2, 3, 5, 6)
@@ -46,7 +51,7 @@ def setup_results_figure():
     # Create text giving details of the analysis
     analysis_text_list = []
     for line, line_num in zip(analysis_metadata, range(0, len(analysis_metadata))):
-        analysis_text_list.append(analysis_textarea.text(-0.45, (-0.8 + (-0.18 * line_num)), line))
+        analysis_text_list.append(analysis_textarea.text(-0.45, (-0.95 + (-0.18 * line_num)), line))
 
     return (results_fig, results_table, analysis_textarea, analysis_text_list)
 
