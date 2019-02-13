@@ -30,12 +30,11 @@ def setup_results_figure():
     table_values = np.zeros((7, 3), dtype=np.int16)
 
     # Create table ready to be updated upon analysis
-    results_table = plt.table(cellText=table_values, rowLabels=rows, colLabels=columns, loc="upper center")
+    results_table = plt.table(cellText=table_values, rowLabels=rows, colLabels=columns,
+                              loc="upper center")
 
     # Create text objects for details about analysis
-    analysis_metadata = ("Data file used:",
-                         "Date modified of data:",
-                         "Date of analysis:")
+    analysis_metadata = ("Data file used:", "Date modified of data:", "Date of analysis:")
 
     # Create text giving details of the analysis
     analysis_text_list = []
