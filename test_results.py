@@ -23,8 +23,8 @@ def setup_results_figure():
 
     # Column and row labels for table
     columns = ("Bad Chips", "Bad Columns", "Bad Pixels")
-    rows = ("Mean Total", "Lower Than Threshold", "Higher Than Threshold",
-            "Standard Deviation Total", "Lower Than Threshold", "Higher Than Threshold",
+    rows = ("Mean Total", "    Lower Than Threshold", "    Higher Than Threshold",
+            "Standard Deviation Total", "    Lower Than Threshold", "    Higher Than Threshold",
             "Overall Total")
     # Only need 16 bit ints as max value of an array element will be 4096
     table_values = np.zeros((7, 3), dtype=np.int16)
@@ -32,6 +32,13 @@ def setup_results_figure():
     # Create table ready to be updated upon analysis
     results_table = plt.table(cellText=table_values, rowLabels=rows, colLabels=columns,
                               loc="upper center")
+    print(dir(results_table))
+
+    # Setting style and weight of row labels
+    italic_label_index = (2, 3, 5, 6)
+    cells_dict = results_table.get_celld()
+    for index in italic_label_index:
+        cells_dict[(index, -1)].get_text().set_fontstyle('italic')
 
     # Create text objects for details about analysis
     analysis_metadata = ("Data file used:", "Date modified of data:", "Date of analysis:")
