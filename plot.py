@@ -38,8 +38,9 @@ def setup_fault_plots():
     # Disabling axes for legend - works permanently so no need to be put into set_plot_titles()
     fault_legend.axis('off')
 
-    # Getting range of colour values used in colormap - jet is used in FEM GUI, so also used here
-    cmap = cm.get_cmap('jet')
+    # Getting range of colour values used in colormap - reverse map used so 'no fault' is white
+    # (more readable)
+    cmap = cm.get_cmap('CMRmap_r')
     colorbar_range = colors.Normalize(vmin=0, vmax=2)
 
     # Creating legend
@@ -128,6 +129,9 @@ def display_data_plot(ax, data, colorbar=None, colorbar_type=0):
             1 - Colorbar for image using standard deviation data
             2 - Colorbar for showing tile's faults
     '''
+    # Use jet unless displaying fault plot
+    cmap_name = 'jet'
+
     # Specify colorbar ticks and determine max value of data
     if colorbar_type == 0:
         c_ticks = [0, 511, 1023, 1535, 2047, 2559, 3071, 3583, 4095]
@@ -140,9 +144,9 @@ def display_data_plot(ax, data, colorbar=None, colorbar_type=0):
         c_ticks = [0, 1, 2]
         # Constant value set for consistency between multiple fault images
         data_max = 2
+        cmap_name = 'CMRmap_r'
 
-    # Jet colourmap is used in live view section of LPD GUI
-    image = ax.imshow(data, cmap='jet', vmin=0, vmax=data_max)
+    image = ax.imshow(data, cmap=cmap_name, vmin=0, vmax=data_max)
 
     if colorbar is not None:
         # Create and add colorbar
