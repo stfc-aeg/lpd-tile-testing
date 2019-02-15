@@ -21,7 +21,7 @@ def add_fault(fault_tile, test_type, x, y, end_points=None):
         fault_tile[x:end_points[0], y:end_points[1]] = 2
 
 
-def detect(tile_section, test_type):
+def detect(tile_section):
     ''' Determines whether the data being passed in should be tested or not
         tile_section can be a column or chip section from a tile
     '''

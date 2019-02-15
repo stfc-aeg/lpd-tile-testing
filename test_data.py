@@ -8,11 +8,7 @@ import fault_tiles
 def bad_chips(tile_data, fault_tile, test_type):
     ''' Test number of bad chips based on the input from tile_data
     '''
-    # Thresholds used to determine bad chips
-    if test_type == 1:
-        chip_threshold = (3148.428, 3639.3864)
-    elif test_type == 2:
-        chip_threshold = (0, 50)  # TODO - Change to stdev values
+    chip_threshold = get_thresholds(test_type)
 
     below_threshold_chips = 0
     above_threshold_chips = 0
@@ -21,7 +17,7 @@ def bad_chips(tile_data, fault_tile, test_type):
         # Calculate the mean of each chip, slicing each chip from tile_data
         fault_chip = extract_data.get_single_chip(fault_tile, chip)
         # Determine whether the chip needs testing
-        test_chip = fault_tiles.detect(fault_chip, test_type)
+        test_chip = fault_tiles.detect(fault_chip)
 
         if test_chip:
             # Take mean value of each chip
@@ -47,17 +43,14 @@ def bad_chips(tile_data, fault_tile, test_type):
 def bad_columns(tile_data, fault_tile, test_type):
     ''' Test number of bad columns based on the input from tile_data
     '''
-    if test_type == 1:
-        column_threshold = (3148.428, 3639.3864)
-    elif test_type == 2:
-        column_threshold = (0, 50)    # TODO - Change
+    column_threshold = get_thresholds(test_type)
 
     below_threshold_columns = 0
     above_threshold_columns = 0
 
     for column in range(0, 128):
         fault_column = extract_data.get_single_column(fault_tile, column)
-        test_column = fault_tiles.detect(fault_column, test_type)
+        test_column = fault_tiles.detect(fault_column)
         if test_column:
             mean_column_value = np.mean(extract_data.get_single_column(tile_data, column))
             if mean_column_value < column_threshold[0]:
@@ -74,10 +67,7 @@ def bad_columns(tile_data, fault_tile, test_type):
 def bad_pixels(tile_data, fault_tile, test_type):
     ''' Test number of bad pixels based on the input from tile_data
     '''
-    if test_type == 1:
-        pixel_threshold = (3148.428, 3639.3864)
-    elif test_type == 2:
-        pixel_threshold = (0, 50)  # TODO - Change
+    pixel_threshold = get_thresholds(test_type)
 
     above_threshold_pixels = 0
     below_threshold_pixels = 0
@@ -102,3 +92,13 @@ def manage_figure(tile_data, tile_plot, tile_colorbar, histogram, colorbar_type)
     # Display tile plot and relevant histogram
     plot.display_data_plot(tile_plot, tile_data, tile_colorbar, colorbar_type)
     plot.display_histogram(histogram, tile_data)
+
+
+def get_thresholds(test_type):
+    if test_type == 1:
+        return (3148.428, 3639.3864)
+    elif test_type == 2:
+        return (0, 50)  # TODO - Change
+    else:
+        # Unknown test
+        test_type = (0, 300)

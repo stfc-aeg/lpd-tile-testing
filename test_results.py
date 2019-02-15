@@ -1,5 +1,6 @@
 import plot
 import extract_data
+import test_data
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -12,7 +13,7 @@ def setup_results_figure():
         Table is created here using an array full of 0's and the values are updated in
         update_table()
     '''
-    results_fig = plt.figure(figsize=(8, 2.5), num='Bad Components')
+    results_fig = plt.figure(figsize=(8, 4), num='Bad Components')
     results_table = results_fig.add_subplot(212)
     analysis_textarea = results_fig.add_subplot(211)
 
@@ -46,12 +47,13 @@ def setup_results_figure():
         cells_dict[(index, -1)].get_text().set_fontstyle('italic')
 
     # Create text objects for details about analysis
-    analysis_metadata = ("Data file used:", "Date modified of data:", "Date of analysis:")
+    analysis_metadata = ("Data file used:", "Date modified of data:", "Date of analysis:",
+                         "Thresholds for mean tests", "Thresholds for standard deviation tests:")
 
     # Create text giving details of the analysis
     analysis_text_list = []
     for line, line_num in zip(analysis_metadata, range(0, len(analysis_metadata))):
-        analysis_text_list.append(analysis_textarea.text(-0.45, (-0.95 + (-0.18 * line_num)), line))
+        analysis_text_list.append(analysis_textarea.text(-0.45, (-0.95 + (-0.13 * line_num)), line))
 
     return (results_fig, results_table, analysis_textarea, analysis_text_list)
 
@@ -80,6 +82,9 @@ def set_analysis_text(analysis_textarea, analysis_text_list, filename, data_path
     new_data.append(datetime.fromtimestamp(date_modified).strftime('%d/%m/%Y'))
     # Get date analysis took place, i.e. runtime's date
     new_data.append(datetime.today().strftime('%d/%m/%Y'))
+    # Get thresholds used for testing
+    for i in range(1, 3):
+        new_data.append(test_data.get_thresholds(i))
 
     # Modify text objects to update details of analysis
     for line, data in zip(analysis_text_list, new_data):
