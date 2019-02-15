@@ -163,7 +163,8 @@ def display_data_plot(ax, data, colorbar=None, colorbar_type=0):
     cols = data.shape[1]
     # Add vertical and horizontal lines to differentiate between chips and tiles
     for i in range(16, cols, 16):
-        ax.vlines(i - 0.5, 0, rows - 1, color='k', linestyles='solid')
+        # Separate chips
+        ax.vlines(i - 0.5, 0, rows - 1, color='k', linestyles='solid', linewidth=0.4)
         # Add vertical lines to differentiate between tiles
         ax.vlines(128 - 0.5, 0, rows - 1, color='k', linestyle='solid')
     for i in range(32, rows, 32):
