@@ -41,7 +41,7 @@ def detect(tile_section):
     num_pixels = len(tile_section[0])
 
     # If majority of section is faulty, don't test it
-    if (pixel_fault_count / num_pixels) * 100 > 90:
+    if (pixel_fault_count / num_pixels) * 100 > 95:
         test_section = False
 
     return test_section

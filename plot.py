@@ -138,8 +138,8 @@ def display_data_plot(ax, data, colorbar=None, colorbar_type=0):
         # Raw/mean data will always have max of 4095
         data_max = 4095
     elif colorbar_type == 1:
-        c_ticks = [0, 100, 200, 300, 400, 500]
-        data_max = 500
+        c_ticks = [0, 20, 40, 60, 80, 100]
+        data_max = 100
     elif colorbar_type == 2:
         c_ticks = [0, 1, 2]
         # Constant value set for consistency between multiple fault images
