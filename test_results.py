@@ -34,12 +34,6 @@ def setup_results_figure():
     results_table = plt.table(cellText=table_values, rowLabels=rows, colLabels=columns,
                               loc="upper center", bbox=[0.0, 0.0, 1.1, 1.2])
 
-    # Increase cell height to make contents of the cells more readable
-    #table_props = results_table.properties()
-    #table_cells = table_props['child_artists']
-    #for cell in table_cells:
-        #cell.set_height(0.5)
-
     # Setting style and weight of row labels
     italic_label_index = (2, 3, 5, 6)
     cells_dict = results_table.get_celld()
@@ -47,10 +41,10 @@ def setup_results_figure():
         cells_dict[(index, -1)].get_text().set_fontstyle('italic')
 
     # Create text objects for details about analysis
-    analysis_metadata = ("Data file used:", "Date modified of data:", "Date of analysis:",
-                         "Thresholds for mean tests:", "Thresholds for standard deviation tests:",
-                         "Number of images per train:", "Command Sequence File Name:",
-                         "Readout Param File Name:", "Setup Param File Name:")
+    analysis_metadata = ("Data File Used", "Date Modified of Data", "Date of Analysis",
+                         "Thresholds for Mean Tests", "Thresholds for Standard Deviation Tests",
+                         "Number of Images Per Train", "Command Sequence File Name",
+                         "Readout Param File Name", "Setup Param File Name")
 
     # Create text giving details of the analysis
     analysis_text_list = []
@@ -96,7 +90,6 @@ def set_analysis_text(analysis_textarea, analysis_text_list, filename, data_path
     for name in file_names:
         new_data.append(metadata.attrs[name].split('/')[-1])
 
-
     # Modify text objects to update details of analysis
     for line, data in zip(analysis_text_list, new_data):
         # Remove old details and update with new ones
@@ -126,7 +119,7 @@ def collate_results(bad_chips_mean, bad_chips_stdev, bad_cols_mean, bad_cols_std
     # Forming results into a list
     results_list = [[bad_chips_mean_total, bad_cols_mean_total, bad_pixels_mean_total],
                     [bad_chips_mean[0], bad_cols_mean[0], bad_pixels_mean[0]],
-                    [bad_chips_mean[1], bad_chips_mean[1], bad_chips_mean[1]],
+                    [bad_chips_mean[1], bad_cols_mean[1], bad_pixels_mean[1]],
                     [bad_chips_stdev_total, bad_cols_stdev_total, bad_pixels_stdev_total],
                     [bad_chips_stdev[0], bad_cols_stdev[0], bad_pixels_stdev[0]],
                     [bad_chips_stdev[1], bad_cols_stdev[1], bad_pixels_stdev[1]],

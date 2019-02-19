@@ -15,7 +15,7 @@ def get_lpd_file(filename):
 
 def get_lpd_data(lpd_file):
     ''' Get all data from a hdf file. The overall process inside get_lpd_file() and this function
-        has been separated so the metadata can be accessed without the need of two h5py file 
+        has been separated so the metadata can be accessed without the need of two h5py file
         objects in the code
     '''
     lpd_data = lpd_file['data'][()]
