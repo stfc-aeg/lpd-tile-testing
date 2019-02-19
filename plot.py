@@ -56,7 +56,7 @@ def setup_trigger_plots():
     ''' Create figure & plots for first 4 trigger tiles. Currently hardcoded to assume each frame
         contains 10 images
     '''
-    fig_trigger = plt.figure(figsize=(8, 3))
+    fig_trigger = plt.figure(figsize=(8, 3), num='Trigger Plots')
     gs_trigger = gridspec.GridSpec(2, 3, width_ratios=[9, 9, 1])
 
     # List containing each subplot containing each trigger plot
@@ -81,7 +81,7 @@ def setup_trigger_plots():
 def setup_first_image_plot():
     ''' Create figure and plot for very first image
     '''
-    fig_first_image = plt.figure(figsize=(8, 6))
+    fig_first_image = plt.figure(figsize=(8, 6), num='First Full Image Plot')
     gs_first_image = gridspec.GridSpec(1, 2, width_ratios=[12, 1], wspace=0.05)
 
     # Create subplots for image and respective colorbar

@@ -122,4 +122,4 @@ def get_num_images_per_train(metadata):
     tree = ET.fromstring(readout)
     img_param = tree.find('numberImages')
 
-    return img_param.get('val')
+    return int(img_param.get('val'))

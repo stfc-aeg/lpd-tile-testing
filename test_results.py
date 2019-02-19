@@ -128,15 +128,15 @@ def collate_results(bad_chips_mean, bad_chips_stdev, bad_cols_mean, bad_cols_std
     return results_list
 
 
-def display_trigger_images(lpd_data, tile_position, fig_trigger, trigger_plots, trigger_colorbar):
+def display_trigger_images(lpd_data, tile_position, fig_trigger, trigger_plots, trigger_colorbar, metadata):
     ''' Display an image of each of the first 4 triggers (images 1, 11, 21, 31) dependent on
         status of checkbox
     '''
-    display_images = (0, 10, 20, 30)
+    trigger_gap = extract_data.get_num_images_per_train(metadata)
 
     # Create each trigger image
     for trigger_pos in range(0, 4):
-        tile = extract_data.get_single_tile(lpd_data, tile_position, display_images[trigger_pos])
+        tile = extract_data.get_single_tile(lpd_data, tile_position, (trigger_gap * trigger_pos))
 
         # Only pass a colorbar once to display_data_plot() - all 4 plots share one colorbar
         if trigger_pos is 3:
