@@ -13,7 +13,7 @@ def setup_results_figure():
         Table is created here using an array full of 0's and the values are updated in
         update_table()
     '''
-    results_fig = plt.figure(figsize=(8, 4), num='Bad Components')
+    results_fig = plt.figure(figsize=(8, 4.5), num='Bad Components')
     results_table = results_fig.add_subplot(212)
     analysis_textarea = results_fig.add_subplot(211)
 
@@ -32,13 +32,13 @@ def setup_results_figure():
 
     # Create table ready to be updated upon analysis
     results_table = plt.table(cellText=table_values, rowLabels=rows, colLabels=columns,
-                              loc="upper center")
+                              loc="upper center", bbox=[0.0, 0.0, 1.1, 1.2])
 
     # Increase cell height to make contents of the cells more readable
-    table_props = results_table.properties()
-    table_cells = table_props['child_artists']
-    for cell in table_cells:
-        cell.set_height(0.21)
+    #table_props = results_table.properties()
+    #table_cells = table_props['child_artists']
+    #for cell in table_cells:
+        #cell.set_height(0.5)
 
     # Setting style and weight of row labels
     italic_label_index = (2, 3, 5, 6)
@@ -48,12 +48,14 @@ def setup_results_figure():
 
     # Create text objects for details about analysis
     analysis_metadata = ("Data file used:", "Date modified of data:", "Date of analysis:",
-                         "Thresholds for mean tests", "Thresholds for standard deviation tests:")
+                         "Thresholds for mean tests:", "Thresholds for standard deviation tests:",
+                         "Number of images per train:", "Command Sequence File Name:",
+                         "Readout Param File Name:", "Setup Param File Name:")
 
     # Create text giving details of the analysis
     analysis_text_list = []
     for line, line_num in zip(analysis_metadata, range(0, len(analysis_metadata))):
-        analysis_text_list.append(analysis_textarea.text(-0.45, (-0.95 + (-0.13 * line_num)), line))
+        analysis_text_list.append(analysis_textarea.text(-0.45, (-0.2 + (-0.12 * line_num)), line))
 
     return (results_fig, results_table, analysis_textarea, analysis_text_list)
 
@@ -71,7 +73,7 @@ def update_table(table_values, results_table):
             cells_dict[(row + 1, col)].get_text().set_text(table_values[row][col])
 
 
-def set_analysis_text(analysis_textarea, analysis_text_list, filename, data_path):
+def set_analysis_text(analysis_textarea, analysis_text_list, filename, data_path, metadata):
     ''' Sets text for each line of text in the results figure
     '''
     new_data = []
@@ -85,6 +87,15 @@ def set_analysis_text(analysis_textarea, analysis_text_list, filename, data_path
     # Get thresholds used for testing
     for i in range(1, 3):
         new_data.append(test_data.get_thresholds(i))
+
+    # Number of images per train
+    new_data.append(extract_data.get_num_images_per_train(metadata))
+
+    # Get file paths of files used to create data and extract filename
+    file_names = ('cmdSequenceFile', 'readoutParamFile', 'setupParamFile')
+    for name in file_names:
+        new_data.append(metadata.attrs[name].split('/')[-1])
+
 
     # Modify text objects to update details of analysis
     for line, data in zip(analysis_text_list, new_data):

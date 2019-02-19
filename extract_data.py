@@ -3,12 +3,21 @@
 
 import h5py
 import numpy as np
+import xml.etree.ElementTree as ET
 
 
-def get_lpd_data(filename):
-    ''' Get all data from a hdf file
+def get_lpd_file(filename):
+    ''' Gets hdf file based on filename
     '''
     lpd_file = h5py.File(filename, 'r')
+    return lpd_file
+
+
+def get_lpd_data(lpd_file):
+    ''' Get all data from a hdf file. The overall process inside get_lpd_file() and this function
+        has been separated so the metadata can be accessed without the need of two h5py file 
+        objects in the code
+    '''
     lpd_data = lpd_file['data'][()]
     return lpd_data
 
@@ -95,3 +104,22 @@ def set_tile_position(tile_orientation, mini_connector):
         tile_position.append(0)
 
     return tile_position
+
+
+def get_file_metadata(file):
+    metadata = file['metadata']
+    return metadata
+
+
+def get_num_images_per_train(metadata):
+    ''' Gets value for the number of images per train, which is then used in the analysis details
+        and when plotting the trigger images
+    '''
+    # Get contents of readoutParamFile
+    readout = metadata['readoutParamFile'][0]
+
+    # Pass contents of readout (of type bytes) into an XML parser and find relevant parameter
+    tree = ET.fromstring(readout)
+    img_param = tree.find('numberImages')
+
+    return img_param.get('val')
