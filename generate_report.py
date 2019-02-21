@@ -11,9 +11,9 @@ def export(fig_list, filename, data_path):
         home_location = home_location[:-1]
 
     save_path = "{}/develop/projects/lpd/tile_analysis".format(os.environ['HOME'])
-
     # split() - remove file extension from filename of data
-    pdf_file = PdfPages('{}/test_results_{}.pdf'.format(save_path, filename.split('.')[0]))
+    pdf_name = 'test_results_{}.pdf'.format(filename.split('.')[0])
+    pdf_file = PdfPages('{}/{}'.format(save_path, pdf_name))
 
     for figure in fig_list:
         # Insert each figure into PDF created by Matplotlib
@@ -24,3 +24,5 @@ def export(fig_list, filename, data_path):
     d['Title'] = "Analysis of {}".format(filename)
 
     pdf_file.close()
+
+    return pdf_name
