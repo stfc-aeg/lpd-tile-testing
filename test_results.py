@@ -4,7 +4,6 @@ import test_data
 
 import matplotlib.pyplot as plt
 import numpy as np
-import os
 from datetime import datetime
 
 
@@ -73,9 +72,8 @@ def set_analysis_text(analysis_textarea, analysis_text_list, filename, data_path
     new_data = []
     # Get name of file used for analysis
     new_data.append(filename)
-    # Get the date the data file was last modified - converted from Unix to human readable format
-    date_modified = os.path.getmtime(data_path + filename)
-    new_data.append(datetime.fromtimestamp(date_modified).strftime('%d/%m/%Y'))
+    # Get the date of the data file - converted from Unix to human readable format
+    new_data.append(extract_data.get_file_date_created(data_path + filename))
     # Get date analysis took place, i.e. runtime's date
     new_data.append(datetime.today().strftime('%d/%m/%Y'))
     # Get thresholds used for testing

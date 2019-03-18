@@ -4,6 +4,12 @@
 import h5py
 import numpy as np
 import xml.etree.ElementTree as ET
+import os
+from datetime import datetime
+
+
+def get_lpd_filename(file_path, filename):
+    return file_path + filename
 
 
 def get_lpd_file(filename):
@@ -123,3 +129,21 @@ def get_num_images_per_train(metadata):
     img_param = tree.find('numberImages')
 
     return int(img_param.get('val'))
+
+
+def get_num_trains(metadata):
+    return int(metadata.attrs['numTrains'])
+
+
+def get_file_date_created(file_path):
+    date_created = os.path.getmtime(file_path)
+    date_str = datetime.fromtimestamp(date_created).strftime('%d/%m/%Y')
+    return date_str
+
+
+def get_total_num_images(metadata):
+    return get_num_images_per_train(metadata) * get_num_trains(metadata)
+
+
+def get_cmd_seq_filename(metadata):
+    return str(metadata.attrs['cmdSequenceFile']).split('/')[-1]
