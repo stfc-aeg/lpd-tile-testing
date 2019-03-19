@@ -135,9 +135,15 @@ def get_num_trains(metadata):
     return int(metadata.attrs['numTrains'])
 
 
-def get_file_date_created(file_path):
-    date_created = os.path.getmtime(file_path)
-    date_str = datetime.fromtimestamp(date_created).strftime('%d/%m/%Y')
+def get_file_date_created(file_path, metadata):
+    ''' Gets the timestamp when file was created, either from the metadata or timestamp of the file
+    '''
+    metadata_key = 'runDate'
+    if metadata_key in metadata.attrs.keys():
+        date_str = metadata.attrs[metadata_key]
+    else:
+        date_created = os.path.getmtime(file_path)
+        date_str = datetime.fromtimestamp(date_created).strftime('%d-%m-%Y %H:%M:%S')
     return date_str
 
 
