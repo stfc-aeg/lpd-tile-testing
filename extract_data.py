@@ -9,6 +9,8 @@ from datetime import datetime
 
 
 def get_lpd_filename(file_path, filename):
+    ''' Returns absolute path of data file
+    '''
     return file_path + filename
 
 
@@ -39,7 +41,6 @@ def get_first_image(lpd_data):
 def get_single_tile(lpd_data, tile_position, image_num):
     ''' Get a single tile (left or right) from lpd_data from any image in the file
     '''
-    # Exception will occur if image_num < 0, needs to be caught
     single_tile = lpd_data[image_num:image_num + 1, tile_position[0]:tile_position[0] + 32,
                            tile_position[1]:tile_position[1] + 128]
     single_tile = np.reshape(single_tile, (32, 128))
@@ -113,6 +114,8 @@ def set_tile_position(tile_orientation, mini_connector):
 
 
 def get_file_metadata(file):
+    ''' Gets metadata groups from open h5 file
+    '''
     metadata = file['metadata']
     return metadata
 
@@ -132,6 +135,8 @@ def get_num_images_per_train(metadata):
 
 
 def get_num_trains(metadata):
+    ''' Returns the number of trains in the data file's metadata
+    '''
     return int(metadata.attrs['numTrains'])
 
 
@@ -148,8 +153,12 @@ def get_file_date_created(file_path, metadata):
 
 
 def get_total_num_images(metadata):
+    ''' Calculates total number of images in the data file
+    '''
     return get_num_images_per_train(metadata) * get_num_trains(metadata)
 
 
 def get_cmd_seq_filename(metadata):
+    ''' Gets the filename of the command sequence file
+    '''
     return str(metadata.attrs['cmdSequenceFile']).split('/')[-1]
