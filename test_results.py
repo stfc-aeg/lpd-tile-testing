@@ -73,7 +73,7 @@ def set_analysis_text(analysis_textarea, analysis_text_list, filename, data_path
     # Get name of file used for analysis
     new_data.append(filename)
     # Get the date of the data file - converted from Unix to human readable format
-    new_data.append(extract_data.get_file_date_created(data_path + filename))
+    new_data.append(extract_data.get_file_date_created((data_path + filename), metadata))
     # Get date analysis took place, i.e. runtime's date
     new_data.append(datetime.today().strftime('%d/%m/%Y'))
     # Get thresholds used for testing
@@ -86,7 +86,7 @@ def set_analysis_text(analysis_textarea, analysis_text_list, filename, data_path
     # Get file paths of files used to create data and extract filename
     file_names = ('cmdSequenceFile', 'readoutParamFile', 'setupParamFile')
     for name in file_names:
-        new_data.append(metadata.attrs[name].split('/')[-1])
+        new_data.append(str(metadata.attrs[name]).split('/')[-1])
 
     # Modify text objects to update details of analysis
     for line, data in zip(analysis_text_list, new_data):

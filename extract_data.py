@@ -161,4 +161,7 @@ def get_total_num_images(metadata):
 def get_cmd_seq_filename(metadata):
     ''' Gets the filename of the command sequence file
     '''
-    return str(metadata.attrs['cmdSequenceFile']).split('/')[-1]
+    filename = str(metadata.attrs['cmdSequenceFile']).split('/')[-1]
+    if filename.endswith('\''):
+        filename = filename[:-len('\'')]
+    return filename

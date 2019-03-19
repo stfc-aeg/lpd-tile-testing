@@ -95,6 +95,8 @@ def manage_figure(tile_data, tile_plot, tile_colorbar, histogram, colorbar_type)
 
 
 def get_thresholds(test_type):
+    ''' Return thresholds used to test data against dependent on the type of test
+    '''
     if test_type == 1:
         # Mean data thresholds
         return (3148.428, 3639.3864)
@@ -103,4 +105,4 @@ def get_thresholds(test_type):
         return (10, 42)
     else:
         # Unknown test
-        test_type = (0, 300)
+        return (0, 300)
