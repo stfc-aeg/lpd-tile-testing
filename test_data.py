@@ -24,15 +24,12 @@ def bad_chips(tile_data, fault_tile, test_type):
             mean_chip_value = np.mean(extract_data.get_single_chip(tile_data, chip))
 
             if mean_chip_value < chip_threshold[0]:
-                # TODO - Put into a separate function, called here and at elif?
-                below_threshold_chips += 1
-                chip_position = chip * 16
-
+                below_threshold_chips, chip_position = chips_addition(below_threshold_chips,chip)
                 # Add fault to tile
                 fault_tiles.add_fault(fault_tile, test_type, 0, chip_position, (32, chip_position + 16))
             elif mean_chip_value > chip_threshold[1]:
-                above_threshold_chips += 1
-                chip_position = chip * 16
+                above_threshold_chips, chip_position = chips_addition(above_threshold_chips,chip)
+                #Add fault to tile 
                 fault_tiles.add_fault(fault_tile, test_type, 0, chip_position, (32, chip_position + 16))
 
     # Collate results of bad chips to be used in test_results.py
@@ -106,3 +103,6 @@ def get_thresholds(test_type):
     else:
         # Unknown test
         return (0, 300)
+
+def chips_addition(threshold, chip): 
+    return threshold + 1 , chip * 16
