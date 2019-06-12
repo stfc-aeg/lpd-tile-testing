@@ -26,7 +26,10 @@ def get_lpd_data(lpd_file):
         has been separated so the metadata can be accessed without the need of two h5py file
         objects in the code
     '''
-    lpd_data = lpd_file['data'][()]
+    try:
+        lpd_data = lpd_file['data'][()]
+    except KeyError:
+        lpd_data = lpd_file['lpd/data/image'][()]
     return lpd_data
 
 
@@ -94,6 +97,11 @@ def get_single_column(tile, col_position):
     single_column = tile[:, col_position:col_position + 1]
     return single_column
 
+def get_single_row(tile, row_position): 
+    ''' Get a single row within the tile 
+    '''
+    single_row = tile[row_position :]
+    return single_row 
 
 def set_tile_position(tile_orientation, mini_connector):
     ''' Used to set variables defining where to get the data from lpd_data
@@ -116,7 +124,10 @@ def set_tile_position(tile_orientation, mini_connector):
 def get_file_metadata(file):
     ''' Gets metadata groups from open h5 file
     '''
-    metadata = file['metadata']
+    try:
+        metadata = file['metadata']
+    except KeyError:
+        metadata = file['lpd/metadata']
     return metadata
 
 

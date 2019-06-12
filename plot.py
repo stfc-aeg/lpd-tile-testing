@@ -6,6 +6,12 @@ import matplotlib.gridspec as gridspec
 import matplotlib.patches as mpatches
 import matplotlib.cm as cm
 import matplotlib.colors as colors
+import numpy as np
+import extract_data
+import os
+import array
+from scipy import optimize
+from scipy import stats
 
 
 def setup_test_plots(test_type):
@@ -94,17 +100,21 @@ def setup_first_image_plot():
 def disable_ticks(ax):
     ''' Disable ticks on both x & y axis - used to remove them from colorbars and image/tile plots
     '''
+    ax.ticklabel_format(useOffset=False)
     ax.set_xticks([])
     ax.set_yticks([])
+    ax.axes.get_xaxis().set_ticks([])
+    ax.axes.get_yaxis().set_ticks([])
 
 
-def set_plot_titles(mean_tile_plot, mean_histogram, stdev_tile_plot, stdev_histogram,
+def set_plot_titles(mean_tile_plot, mean_histogram, mean_row_scatter, stdev_tile_plot, stdev_histogram,
                     fault_tile_plot, trigger_plots, first_image_plot):
     ''' Set titles of all plots and remove ticks on images
         Titles are removed on each gca() call so must be re-set for every analysis done
     '''
     mean_tile_plot.set_title("Plot of Tile Using Mean Data", fontsize=16)
     mean_histogram.set_title("Histogram of Mean Tile Data", fontsize=16)
+    mean_row_scatter.set_title("Plot of the Tile's Mean Row Data", fontsize=16)
     disable_ticks(mean_tile_plot)
 
     stdev_tile_plot.set_title("Plot of Tile Using Standard Deviation Data", fontsize=16)
@@ -175,3 +185,95 @@ def display_histogram(ax, data):
     ''' Displays histograms
     '''
     ax.hist(data.flatten(), bins=250)
+
+def setup_average_row_scatter(): 
+    '''Creates the scatter graph layout
+    ''' 
+    # Create figure
+    fig = plt.figure(figsize=(8, 4), num='Average Data for Tile Rows')  
+    ax = fig.add_subplot(111)
+    return(fig , ax)
+
+def create_average_scatter(data , ax): 
+
+    [width, height] = plt.rcParams['figure.figsize']
+    plt.rcParams['figure.figsize'] = [width*2, height*2]
+
+    file_path = '/data/lpd/matt/good_data'
+    data_dir = (os.listdir(file_path))
+    num_vals = 32
+    x_vals = np.linspace(0, 31, num_vals)
+    good_tile_data = None
+ 
+    for data_file in data_dir:
+        file_path = '/data/lpd/matt/good_data/' + data_file
+        lpd_file = extract_data.get_lpd_file(file_path)
+        lpd_data = extract_data.get_lpd_data(lpd_file)
+        mean_tile = extract_data.get_mean_tile(lpd_data, [32,0]) 
+        if good_tile_data is None: 
+            good_tile_data = np.empty((0, *mean_tile.shape))
+        good_tile_data = np.append(good_tile_data, [mean_tile], axis=0)
+
+    good_tile_mean = np.mean(good_tile_data, axis=0)
+
+    num_rows = len(x_vals)
+    row_means = np.empty(num_rows)
+    row_actual = np.empty(num_rows)
+
+    for row in range(32): 
+        row_means[row] = np.mean(good_tile_mean[row])
+        row_actual[row] = np.mean(extract_data.get_single_row(data, row))
+
+    mean = ax.scatter(x_vals,row_means, c='r', label='Mean tile row average')
+    actual = ax.scatter(x_vals, row_actual, c='b', label='Actual Tile Row Average')
+
+    means_curve = CurveFit(x_vals, row_means, exp_rolloff, [1, 1, 2000])
+    means_curve.plot_fit(ax , 'tab:orange', 'Mean tile exponential fit')
+
+    mean_sig = CurveFit(x_vals, row_means, sigmoid, [3, 25, 1900])
+    mean_sig.plot_fit(ax , 'tab:red', 'Mean tile sigmoid fit')
+
+    actual_curve = CurveFit(x_vals, row_actual, exp_rolloff, [1, 1, 2000])
+    actual_curve.plot_fit(ax , 'tab:blue', 'Actual tile exponential fit')
+
+    actual_sig = CurveFit(x_vals, row_actual, sigmoid, [3, 25, 1900])
+    actual_sig.plot_fit(ax , 'tab:green', 'Actual tile sigmoid fit')
+    _ = ax.legend(loc='best')
+
+#sigmoid graph calculations
+def sigmoid(x, k, x_0, L):
+    return L / (1.0 + np.exp(-k * (x_0 - x)))
+
+#Expected rolloff graph calculations 
+def exp_rolloff(x_vals, a, b, c):
+    return c - a * np.exp(b * x_vals)
+
+class CurveFit(object):
+    ''' 
+    Simple container to hold results of curve fit
+    '''
+    def __init__(self, x_vals, y_vals, model_fn, init_params):
+        
+        # Store x and y points
+        self.x_vals = x_vals
+        self.y_vals = y_vals
+        
+        # Fit the data
+        self.params, self.pcov = optimize.curve_fit(model_fn, x_vals, y_vals, init_params)
+
+        # Calculate the standard deviation of fitted parameters from covariance matrix
+        self.perr = np.sqrt(np.diag(self.pcov))
+
+        # Calculate expected values based on fit
+        self.y_fit = model_fn(x_vals, *self.params)
+
+        # Calculate reduced chi-squared
+        self.ndof = len(y_vals) - len(init_params)
+        self.chisq_dof = stats.chisquare(y_vals, self.y_fit).statistic / self.ndof
+        
+    def plot_fit(self, ax ,  colour, label_txt=None):
+        
+        label=r'$\chi^2$={:.2f}/dof'.format(self.chisq_dof)
+        if label_txt is not None:
+            label = r'{}, {}'.format(label_txt, label)
+        ax.plot(self.x_vals, self.y_fit, c=colour, label=label)
