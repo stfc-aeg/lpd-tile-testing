@@ -240,15 +240,16 @@ def create_average_scatter(data , ax):
     actual_sig.plot_fit(ax , 'tab:green', 'Actual tile sigmoid fit')
     _ = ax.legend(loc='best')
 
-
+#sigmoid graph calculations
 def sigmoid(x, k, x_0, L):
     return L / (1.0 + np.exp(-k * (x_0 - x)))
 
+#Expected rolloff graph calculations 
 def exp_rolloff(x_vals, a, b, c):
     return c - a * np.exp(b * x_vals)
 
 class CurveFit(object):
-    '''
+    ''' 
     Simple container to hold results of curve fit
     '''
     def __init__(self, x_vals, y_vals, model_fn, init_params):
