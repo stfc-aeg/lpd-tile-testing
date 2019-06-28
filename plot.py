@@ -94,8 +94,12 @@ def setup_first_image_plot():
 def disable_ticks(ax):
     ''' Disable ticks on both x & y axis - used to remove them from colorbars and image/tile plots
     '''
+    ax.ticklabel_format(useOffset=False)
     ax.set_xticks([])
     ax.set_yticks([])
+    ax.axes.get_xaxis().set_ticks([])
+    ax.axes.get_yaxis().set_ticks([])
+
 
 
 def set_plot_titles(mean_tile_plot, mean_histogram, stdev_tile_plot, stdev_histogram,
