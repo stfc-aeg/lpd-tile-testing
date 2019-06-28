@@ -6,6 +6,12 @@ import matplotlib.gridspec as gridspec
 import matplotlib.patches as mpatches
 import matplotlib.cm as cm
 import matplotlib.colors as colors
+import numpy as np
+import extract_data
+import os
+import array
+from scipy import optimize
+from scipy import stats
 
 
 def setup_test_plots(test_type):
@@ -101,14 +107,14 @@ def disable_ticks(ax):
     ax.axes.get_yaxis().set_ticks([])
 
 
-
-def set_plot_titles(mean_tile_plot, mean_histogram, stdev_tile_plot, stdev_histogram,
+def set_plot_titles(mean_tile_plot, mean_histogram, average_LED, stdev_tile_plot, stdev_histogram,
                     fault_tile_plot, trigger_plots, first_image_plot):
     ''' Set titles of all plots and remove ticks on images
         Titles are removed on each gca() call so must be re-set for every analysis done
     '''
     mean_tile_plot.set_title("Plot of Tile Using Mean Data", fontsize=16)
     mean_histogram.set_title("Histogram of Mean Tile Data", fontsize=16)
+    average_LED.set_title("Plot of tiles average 6th trigger image", fontsize=16)
     disable_ticks(mean_tile_plot)
 
     stdev_tile_plot.set_title("Plot of Tile Using Standard Deviation Data", fontsize=16)
@@ -179,3 +185,26 @@ def display_histogram(ax, data):
     ''' Displays histograms
     '''
     ax.hist(data.flatten(), bins=250)
+
+def setup_trigger_6_tile(): 
+    ''' Create figure & plots for the average of the 6th trigger tile. Currently hardcoded to assume each frame
+        contains 10 images
+    '''
+    fig_average = plt.figure(figsize=(8, 2))
+    gs_average = gridspec.GridSpec(1, 2, width_ratios=[12, 1], wspace=0.05)
+
+    # Create subplots for image and respective colorbar
+    average_plot = fig_average.add_subplot(gs_average[0, 0])
+    average_colorbar = fig_average.add_subplot(gs_average[0, 1])
+
+    return (fig_average, average_plot, average_colorbar)
+
+def create_trigger_6_tile(lpd_data, position,  average_plot, average_colourbar, metadata): 
+ 
+    trigger_gap = extract_data.get_num_images_per_train(metadata)
+
+    # Create image for the 6th trigger
+    tile_data = lpd_data[:, 32:64, 0:128]
+    average_plot.imshow(tile_data[5], cmap='jet', vmin=0, vmax=4096)
+    colorbar_type = 0 
+    display_data_plot(average_plot, tile_data[5], average_colourbar, colorbar_type)
